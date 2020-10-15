@@ -1,0 +1,170 @@
+{
+  "id": "",
+  "name": "",
+  "font_family": "iconfont",
+  "css_prefix_text": "icon-",
+  "description": "",
+  "glyphs": [
+    {
+      "icon_id": "586922",
+      "name": "host",
+      "font_class": "host",
+      "unicode": "e74a",
+      "unicode_decimal": 59210
+    },
+    {
+      "icon_id": "701705",
+      "name": "account",
+      "font_class": "account",
+      "unicode": "e604",
+      "unicode_decimal": 58884
+    },
+    {
+      "icon_id": "702248",
+      "name": "database",
+      "font_class": "database",
+      "unicode": "e7ad",
+      "unicode_decimal": 59309
+    },
+    {
+      "icon_id": "1115024",
+      "name": "查询",
+      "font_class": "chaxun",
+      "unicode": "e60f",
+      "unicode_decimal": 58895
+    },
+    {
+      "icon_id": "1269846",
+      "name": "退出登录",
+      "font_class": "tuichudenglu",
+      "unicode": "e615",
+      "unicode_decimal": 58901
+    },
+    {
+      "icon_id": "1991129",
+      "name": "我的工单",
+      "font_class": "order-mine",
+      "unicode": "e6cb",
+      "unicode_decimal": 59083
+    },
+    {
+      "icon_id": "2099018",
+      "name": "权限管理",
+      "font_class": "quanxianguanli",
+      "unicode": "e50d",
+      "unicode_decimal": 58637
+    },
+    {
+      "icon_id": "3001050",
+      "name": "部门",
+      "font_class": "bumen",
+      "unicode": "e651",
+      "unicode_decimal": 58961
+    },
+    {
+      "icon_id": "3828115",
+      "name": "端口探测",
+      "font_class": "duankoutance",
+      "unicode": "e654",
+      "unicode_decimal": 58964
+    },
+    {
+      "icon_id": "3977995",
+      "name": "待审批知识",
+      "font_class": "daishenpizhishi",
+      "unicode": "e619",
+      "unicode_decimal": 58905
+    },
+    {
+      "icon_id": "3978082",
+      "name": "执行",
+      "font_class": "zhihang",
+      "unicode": "e62f",
+      "unicode_decimal": 58927
+    },
+    {
+      "icon_id": "4784080",
+      "name": "查询",
+      "font_class": "chaxun1",
+      "unicode": "e64f",
+      "unicode_decimal": 58959
+    },
+    {
+      "icon_id": "6899193",
+      "name": "工单管理",
+      "font_class": "gongdanguanli",
+      "unicode": "e68c",
+      "unicode_decimal": 59020
+    },
+    {
+      "icon_id": "7404548",
+      "name": "正常",
+      "font_class": "zhengchang",
+      "unicode": "e78a",
+      "unicode_decimal": 59274
+    },
+    {
+      "icon_id": "7762159",
+      "name": "执行",
+      "font_class": "zhihang1",
+      "unicode": "e627",
+      "unicode_decimal": 58919
+    },
+    {
+      "icon_id": "7978112",
+      "name": "异常",
+      "font_class": "yichang",
+      "unicode": "e606",
+      "unicode_decimal": 58886
+    },
+    {
+      "icon_id": "8729890",
+      "name": "角色管理",
+      "font_class": "jiaoseguanli",
+      "unicode": "e6a8",
+      "unicode_decimal": 59048
+    },
+    {
+      "icon_id": "8729900",
+      "name": "用户管理",
+      "font_class": "yonghuguanli",
+      "unicode": "e6ab",
+      "unicode_decimal": 59051
+    },
+    {
+      "icon_id": "9003199",
+      "name": "驳回",
+      "font_class": "bohui",
+      "unicode": "e692",
+      "unicode_decimal": 59026
+    },
+    {
+      "icon_id": "9539921",
+      "name": "待审批",
+      "font_class": "daishenpi",
+      "unicode": "e66e",
+      "unicode_decimal": 58990
+    },
+    {
+      "icon_id": "11409125",
+      "name": "角色管理",
+      "font_class": "jiaoseguanli1",
+      "unicode": "e608",
+      "unicode_decimal": 58888
+    },
+    {
+      "icon_id": "11488289",
+      "name": "password",
+      "font_class": "password",
+      "unicode": "e786",
+      "unicode_decimal": 59270
+    },
+    {
+      "icon_id": "14445775",
+      "name": "历史",
+      "font_class": "lishi",
+      "unicode": "e75f",
+      "unicode_decimal": 59231
+    }
+  ]
+}
