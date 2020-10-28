@@ -6,6 +6,7 @@
       <el-breadcrumb-item>待审批</el-breadcrumb-item>
     </el-breadcrumb>
     <el-card>
+      <h1>待审批工单列表</h1>
       <el-table :data="tableData" style="width: 100%" border stripe>
         <el-table-column type="expand">
           <template slot-scope="props">
@@ -66,6 +67,18 @@
         <el-table-column label="数据库" prop="dbname" align="center" header-align="center"></el-table-column>
         <el-table-column label="发起时间" prop="create_time" align="center" header-align="center"></el-table-column>
       </el-table>
+
+      <h1>osc信息列表</h1>
+      <el-table :data="ocstableData" style="width: 100%" border stripe>
+        <el-table-column label="#" type="index" align="center" header-align="center"></el-table-column>
+        <el-table-column label="数据库名" prop="DBNAME" align="center" header-align="center"></el-table-column>
+        <el-table-column label="表名" prop="TABLENAME" align="center" header-align="center"></el-table-column>
+        <el-table-column label="SQL" prop="COMMAND" align="center" header-align="center"></el-table-column>
+        <el-table-column label="执行进度百分比" prop="PERCENT" align="center" header-align="center"></el-table-column>
+        <el-table-column label="剩余时间" prop="REMAINTIME" align="center" header-align="center"></el-table-column>
+      </el-table>
+      <el-button type="primary" onclick="location.reload();" round>刷新
+      </el-button>
       <el-pagination
           @size-change="handleSizeChange"
           @current-change="handleCurrentChange"
@@ -83,25 +96,30 @@
 import hljs from "highlight.js";
 
 export default {
+  inject: ['reload'],
   data() {
     return {
       tableData: [],
       offset: 1,
       limit: 5,
-      total: 0
+      total: 0,
+      ocstableData: []
     };
   },
   mounted() {
     this.get_workorder();
+    this.get_osc();
   },
   methods: {
     handleSizeChange(val) {
       this.limit = val;
       this.get_workorder();
+      this.get_osc();
     },
     handleCurrentChange(val) {
       this.offset = val;
       this.get_workorder();
+      this.get_osc();
     },
     async commitOrder(row) {
       const {data: res} = await this.$ajax
@@ -160,7 +178,23 @@ export default {
           i.sql = hljs.highlight("sql", i.sql).value;
         });
       });
-    }
+    },
+    async get_osc() {
+      const {data: res} = await this.$ajax
+          .get(`/get_osc/`)
+          .catch(() => {
+            return this.$notify.error({
+              title: "错误",
+              message: "发起请求osc失败"
+            });
+          });
+      if (res.msg != "success") return this.$message.error("获取osc失败");
+      this.ocstableData = res.data;
+      this.ocstableData.forEach(item => {
+        // item.COMMAND = hljs.highlight("sql", item.COMMAND).value;
+        item.PERCENT = item.PERCENT + "%";
+      });
+    },
   }
 };
 </script>
