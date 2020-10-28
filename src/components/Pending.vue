@@ -19,20 +19,20 @@
               <el-table-column label="审批进度" header-align="center" width="400px">
                 <template slot-scope="scope">
                   <el-steps
-                    :active="scope.row.status_code"
-                    finish-status="success"
-                    :process-status="scope.row.remark?'error':'process'"
-                    align-center
-                    class="steps_class"
+                      :active="scope.row.status_code"
+                      finish-status="success"
+                      :process-status="scope.row.remark?'error':'process'"
+                      align-center
+                      class="steps_class"
                   >
                     <el-step title="提交工单"></el-step>
                     <el-step
-                      title="审批"
-                      :description="scope.row.remark && scope.row.status_code==1?scope.row.remark:''"
+                        title="审批"
+                        :description="scope.row.remark && scope.row.status_code==1?scope.row.remark:''"
                     ></el-step>
                     <el-step
-                      title="执行"
-                      :description="scope.row.remark && scope.row.status_code==2?scope.row.remark:''"
+                        title="执行"
+                        :description="scope.row.remark && scope.row.status_code==2?scope.row.remark:''"
                     ></el-step>
                   </el-steps>
                 </template>
@@ -41,17 +41,19 @@
               <el-table-column label="操作" align="center" header-align="center">
                 <template slot-scope="scope">
                   <el-button
-                    type="primary"
-                    icon="iconfont icon-zhihang"
-                    size="mini"
-                    @click="commitOrder(scope.row)"
-                  >执行</el-button>
+                      type="primary"
+                      icon="iconfont icon-zhihang"
+                      size="mini"
+                      @click="commitOrder(scope.row)"
+                  >执行
+                  </el-button>
                   <el-button
-                    type="danger"
-                    icon="iconfont icon-bohui"
-                    size="mini"
-                    @click="rejectOrder(scope.row)"
-                  >驳回</el-button>
+                      type="danger"
+                      icon="iconfont icon-bohui"
+                      size="mini"
+                      @click="rejectOrder(scope.row)"
+                  >驳回
+                  </el-button>
                 </template>
               </el-table-column>
             </el-table>
@@ -65,14 +67,14 @@
         <el-table-column label="发起时间" prop="create_time" align="center" header-align="center"></el-table-column>
       </el-table>
       <el-pagination
-        @size-change="handleSizeChange"
-        @current-change="handleCurrentChange"
-        :current-page="offset"
-        :page-sizes="[5,10,20,50]"
-        :page-size="limit"
-        :hide-on-single-page="true"
-        layout="total, sizes, prev, pager, next, jumper"
-        :total="total"
+          @size-change="handleSizeChange"
+          @current-change="handleCurrentChange"
+          :current-page="offset"
+          :page-sizes="[5,10,20,50]"
+          :page-size="limit"
+          :hide-on-single-page="true"
+          layout="total, sizes, prev, pager, next, jumper"
+          :total="total"
       ></el-pagination>
     </el-card>
   </div>
@@ -102,17 +104,17 @@ export default {
       this.get_workorder();
     },
     async commitOrder(row) {
-      const { data: res } = await this.$ajax
-        .post(`/execsql/${row.id}/`)
-        .catch(() => {
-          return this.$notify.error({
-            title: "错误",
-            message: "发起SQL执行操作失败"
+      const {data: res} = await this.$ajax
+          .post(`/execsql/${row.id}/`)
+          .catch(() => {
+            return this.$notify.error({
+              title: "错误",
+              message: "发起SQL执行操作失败"
+            });
           });
-        });
       if (res.msg != "success" || !res.msg) return this.$message.error(res.msg);
       this.get_workorder();
-      this.$message.success("SQL执行成功");
+      this.$message.success("SQL已放后台执行中，请稍后刷新页面查看是否执行完成！");
     },
     rejectOrder(row) {
       this.$prompt("请输入驳回理由", "提示", {
@@ -121,35 +123,35 @@ export default {
         inputPattern: /[^\s]+/,
         inputErrorMessage: "请输入内容"
       })
-        .then(async ({ value }) => {
-          const { data: res } = await this.$ajax
-            .post(`/sqlrecord/${row.id}/?remark=${value}`)
-            .catch(() => {
-              return this.$notify.error({
-                title: "错误",
-                message: "发起驳回操作失败"
-              });
+          .then(async ({value}) => {
+            const {data: res} = await this.$ajax
+                .post(`/sqlrecord/${row.id}/?remark=${value}`)
+                .catch(() => {
+                  return this.$notify.error({
+                    title: "错误",
+                    message: "发起驳回操作失败"
+                  });
+                });
+            if (res.msg != "success") return this.$message.error("驳回操作失败");
+            this.$message.success("已驳回该工单");
+            this.get_workorder();
+          })
+          .catch(() => {
+            this.$message({
+              type: "info",
+              message: "取消输入"
             });
-          if (res.msg != "success") return this.$message.error("驳回操作失败");
-          this.$message.success("已驳回该工单");
-          this.get_workorder();
-        })
-        .catch(() => {
-          this.$message({
-            type: "info",
-            message: "取消输入"
           });
-        });
     },
     async get_workorder() {
-      const { data: res } = await this.$ajax
-        .get(`/pending/?offset=${this.offset}&limit=${this.limit}`)
-        .catch(() => {
-          return this.$notify.error({
-            title: "错误",
-            message: "发起请求工单失败"
+      const {data: res} = await this.$ajax
+          .get(`/pending/?offset=${this.offset}&limit=${this.limit}`)
+          .catch(() => {
+            return this.$notify.error({
+              title: "错误",
+              message: "发起请求工单失败"
+            });
           });
-        });
       if (res.msg != "success") return this.$message.error("获取工单失败");
       this.tableData = res.data;
       this.total = res.total;
@@ -174,11 +176,13 @@ export default {
   font-size: 10px;
   line-height: 38px;
 }
+
 .iconfon {
   font-size: 11px;
   width: 18px;
   height: 18px;
 }
+
 .el-pagination {
   margin-top: 20px;
 }
