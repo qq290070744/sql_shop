@@ -39,7 +39,7 @@
                     <el-step
                       v-else
                       title="执行"
-                      :description="scope.row.remark && scope.row.status_code==2?scope.row.remark:''"
+                      :description="scope.row.remark && scope.row.status_code==2?scope.row.remark.slice(0,100):''"
                     ></el-step>
                   </el-steps>
                 </template>
