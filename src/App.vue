@@ -30,5 +30,7 @@ export default {
 
 <style>
 
-
+.el-message-box {
+  width: 1000px!important;
+}
 </style>
