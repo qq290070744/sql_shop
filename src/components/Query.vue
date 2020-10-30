@@ -41,7 +41,7 @@
             <el-form-item label="限制条数:" prop="limit2">
               <el-select v-model="queryInfo.limit2" placeholder="请选择限制条数" style="width: 100px;">
                 <el-option
-                    v-for="item in [1,100,500,1000,10000]"
+                    v-for="item in [10,100,500,1000,10000]"
                     :key="item"
                     :value="item"
                     :label="item"
