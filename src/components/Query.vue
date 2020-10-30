@@ -29,6 +29,7 @@
             <el-form-item label="数据库:" prop="selectDb">
               <el-select
                   v-model="queryInfo.selectDb"
+                  filterable
                   placeholder="请选择数据库"
                   @change="getTable"
                   style="width: 200px;"
@@ -74,7 +75,7 @@
                   @change="getDesc"
               >
                 <el-collapse-item v-for="item in tabs" :key="item" :title="item" :name="item">
-<!--                  <pre v-html="desc"></pre>-->
+                  <!--                  <pre v-html="desc"></pre>-->
                 </el-collapse-item>
               </el-collapse>
             </ul>

@@ -29,6 +29,7 @@
             <el-form-item label="数据库:" prop="selectDb" label-width="150px">
               <el-select
                   v-model="queryInfo.selectDb"
+                  filterable
                   placeholder="请选择数据库"
                   @change="getTable"
                   style="width: 250px;"
