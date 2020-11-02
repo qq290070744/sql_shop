@@ -77,7 +77,7 @@
         <el-table-column label="执行进度百分比" prop="PERCENT" align="center" header-align="center"></el-table-column>
         <el-table-column label="剩余时间" prop="REMAINTIME" align="center" header-align="center"></el-table-column>
       </el-table>
-      <el-button type="primary" onclick="location.reload();" round>刷新
+      <el-button type="primary" @click="get_workorder();get_osc()">刷新
       </el-button>
       <el-pagination
           @size-change="handleSizeChange"
