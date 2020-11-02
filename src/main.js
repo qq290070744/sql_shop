@@ -26,8 +26,8 @@ import echarts from 'echarts'
 
 //这两行的位置很重要，很重要，重要
 Vue.prototype.$ajax = axios;
-// axios.defaults.baseURL = 'http://localhost:8800/api/v1';
-axios.defaults.baseURL = 'http://localhost:8000/api/v1';
+// axios.defaults.baseURL = 'http://localhost:8000/api/v1';
+axios.defaults.baseURL = process.env.VUE_APP_baseURL;
 axios.interceptors.request.use(config => {
     config.headers.Authorization = window.sessionStorage.getItem('token')
     return config
