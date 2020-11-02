@@ -56,7 +56,7 @@
                 active-text="开启sql检查"
                 inactive-text="关闭sql检查"
                 style="height: 40px"
-                disabled
+
             ></el-switch>
           </el-col>
         </el-row>
