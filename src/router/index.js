@@ -11,6 +11,8 @@ import User from '../components/User'
 import Workorder from '../components/Workorder'
 import Pending from '../components/Pending'
 import Historyorder from '../components/Historyorder'
+import Inception_show_variables from "@/components/Inception_show_variables";
+import Inception_show_levels from "@/components/Inception_show_levels";
 
 Vue.use(VueRouter)
 
@@ -53,27 +55,37 @@ const routes = [
             {
                 path: '/roles',
                 name: '角色列表',
-                component:Role
+                component: Role
             },
             {
                 path: '/user',
                 name: '用户列表',
-                component:User
+                component: User
             },
             {
                 path: '/workorder',
                 name: '我的工单',
-                component:Workorder
+                component: Workorder
             },
             {
                 path: '/pending',
                 name: '待审批',
-                component:Pending
+                component: Pending
             },
             {
                 path: '/historyorder',
                 name: '历史工单',
-                component:Historyorder
+                component: Historyorder
+            },
+            {
+                path: '/inception_show_variables',
+                name: '审核规则',
+                component: Inception_show_variables
+            },
+            {
+                path: '/inception_show_levels',
+                name: '自定义审核级别',
+                component: Inception_show_levels
             },
         ]
     }
