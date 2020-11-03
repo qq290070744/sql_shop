@@ -13,33 +13,34 @@
               <el-table-column label="#" type="index" align="center" header-align="center"></el-table-column>
               <el-table-column label="SQL" header-align="center">
                 <template slot-scope="scope">
-                  <div v-html="scope.row.sql"></div>
+                  <pre><div v-html="scope.row.sql"></div></pre>
+                  <el-button type="primary" @click="alert_sql(scope.row.sql);" size="mini" round>查看全部sql</el-button>
                 </template>
               </el-table-column>
               <el-table-column label="审批进度" header-align="center" width="400px">
                 <template slot-scope="scope">
                   <el-steps
-                    :active="scope.row.status_code"
-                    finish-status="success"
-                    :process-status="scope.row.remark?'error':'process'"
-                    align-center
-                    class="steps_class"
+                      :active="scope.row.status_code"
+                      finish-status="success"
+                      :process-status="scope.row.remark?'error':'process'"
+                      align-center
+                      class="steps_class"
                   >
                     <el-step title="提交工单"></el-step>
                     <el-step
-                      title="审批"
-                      :description="scope.row.remark && scope.row.status_code==1?scope.row.remark:''"
+                        title="审批"
+                        :description="scope.row.remark && scope.row.status_code==1?scope.row.remark:''"
                     ></el-step>
                     <el-step
-                      v-if="scope.row.remark==='rollbacked'"
-                      title="已回滚"
-                      icon="el-icon-refresh-left"
-                      status="finish"
+                        v-if="scope.row.remark==='rollbacked'"
+                        title="已回滚"
+                        icon="el-icon-refresh-left"
+                        status="finish"
                     ></el-step>
                     <el-step
-                      v-else
-                      title="执行"
-                      :description="scope.row.remark && scope.row.status_code==2?scope.row.remark.slice(0,100):''"
+                        v-else
+                        title="执行"
+                        :description="scope.row.remark && scope.row.status_code==2?scope.row.remark.slice(0,100):''"
                     ></el-step>
                   </el-steps>
                 </template>
@@ -48,11 +49,12 @@
               <el-table-column label="操作" align="center" header-align="center">
                 <template slot-scope="scope">
                   <el-button
-                    type="primary"
-                    icon="el-icon-refresh-left"
-                    size="mini"
-                    @click="rollbackOrder(scope.row)"
-                  >回滚</el-button>
+                      type="primary"
+                      icon="el-icon-refresh-left"
+                      size="mini"
+                      @click="rollbackOrder(scope.row)"
+                  >回滚
+                  </el-button>
                 </template>
               </el-table-column>
             </el-table>
@@ -66,20 +68,21 @@
         <el-table-column label="发起时间" prop="create_time" align="center" header-align="center"></el-table-column>
       </el-table>
       <el-pagination
-        @size-change="handleSizeChange"
-        @current-change="handleCurrentChange"
-        :current-page="offset"
-        :page-sizes="[5,10,20,50]"
-        :page-size="limit"
-        :hide-on-single-page="true"
-        layout="total, sizes, prev, pager, next, jumper"
-        :total="total"
+          @size-change="handleSizeChange"
+          @current-change="handleCurrentChange"
+          :current-page="offset"
+          :page-sizes="[5,10,20,50]"
+          :page-size="limit"
+          :hide-on-single-page="true"
+          layout="total, sizes, prev, pager, next, jumper"
+          :total="total"
       ></el-pagination>
     </el-card>
   </div>
 </template>
 <script>
 import hljs from "highlight.js";
+import sqlFormatter from "sql-formatter";
 
 export default {
   data() {
@@ -102,29 +105,30 @@ export default {
       this.offset = val;
       this.get_workorder();
     },
-    rollbackOrder(row) {},
+    rollbackOrder(row) {
+    },
     async get_workorder() {
-      const { data: res } = await this.$ajax
-        .get(`/historyorder/?offset=${this.offset}&limit=${this.limit}`)
-        .catch(() => {
-          return this.$notify.error({
-            title: "错误",
-            message: "发起请求历史工单失败"
+      const {data: res} = await this.$ajax
+          .get(`/historyorder/?offset=${this.offset}&limit=${this.limit}`)
+          .catch(() => {
+            return this.$notify.error({
+              title: "错误",
+              message: "发起请求历史工单失败"
+            });
           });
-        });
       if (res.msg != "success") return this.$message.error("获取历史工单失败");
       this.tableData = res.data;
       this.total = res.total;
-      this.tableData.forEach(item => {
-        item.sql.forEach(i => {
-          i.sql = hljs.highlight("sql", i.sql).value;
-        });
-      });
+      // this.tableData.forEach(item => {
+      //   item.sql.forEach(i => {
+      //     i.sql = hljs.highlight("sql", i.sql).value;
+      //   });
+      // });
     },
     rollbackOrder(row) {
       if (
-        (row.remark != "" && row.status_code != 3) ||
-        row.remark === "rollbacked"
+          (row.remark != "" && row.status_code != 3) ||
+          row.remark === "rollbacked"
       )
         return this.$notify.error({
           title: "错误",
@@ -135,28 +139,35 @@ export default {
         cancelButtonText: "取消",
         type: "warning"
       })
-        .then(async () => {
-          const { data: res } = await this.$ajax
-            .post(`/rollbacksql/${row.id}/`)
-            .catch(() => {
-              return this.$notify.error({
-                title: "错误",
-                message: "发起回滚操作失败"
-              });
+          .then(async () => {
+            const {data: res} = await this.$ajax
+                .post(`/rollbacksql/${row.id}/`)
+                .catch(() => {
+                  return this.$notify.error({
+                    title: "错误",
+                    message: "发起回滚操作失败"
+                  });
+                });
+            if (res.msg != "success") return this.$message.error(res.msg);
+            this.$message({
+              type: "success",
+              message: "回滚成功!"
             });
-          if (res.msg != "success") return this.$message.error(res.msg);
-          this.$message({
-            type: "success",
-            message: "回滚成功!"
+            this.get_workorder();
+          })
+          .catch(() => {
+            this.$message({
+              type: "info",
+              message: "已取消回滚操作"
+            });
           });
-          this.get_workorder();
-        })
-        .catch(() => {
-          this.$message({
-            type: "info",
-            message: "已取消回滚操作"
-          });
-        });
+    },
+    async alert_sql(sql) {
+      sql = sqlFormatter.format(sql);
+      sql = hljs.highlight("sql", sql).value;
+      this.$alert('<pre>' + sql + '</pre>', 'sql', {
+        dangerouslyUseHTMLString: true,
+      });
     }
   }
 };
@@ -173,24 +184,30 @@ export default {
   font-size: 10px;
   line-height: 38px;
 }
+
 .iconfon {
   font-size: 11px;
   width: 18px;
   height: 18px;
 }
+
 .el-pagination {
   margin-top: 20px;
 }
+
 .el-step__icon.is-icon {
   width: 20px !important;
 }
+
 .el-step__icon-inner[class*="el-icon"]:not(.is-status) {
   color: #67c23a;
 }
+
 .el-step__head.is-finish {
   height: 24px !important;
   color: #67c23a !important;
 }
+
 .el-step__title.is-finish {
   height: 37.6px !important;
   color: #67c23a !important;

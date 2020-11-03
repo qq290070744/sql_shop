@@ -14,7 +14,8 @@
               <el-table-column label="#" type="index" align="center" header-align="center"></el-table-column>
               <el-table-column label="SQL" header-align="center">
                 <template slot-scope="scope">
-                  <div v-html="scope.row.sql"></div>
+                  <pre><div v-html="scope.row.sql"></div></pre>
+                  <el-button type="primary" @click="alert_sql(scope.row.sql);" size="mini" round>查看全部sql</el-button>
                 </template>
               </el-table-column>
               <el-table-column label="审批进度" header-align="center" width="400px">
@@ -76,6 +77,31 @@
         <el-table-column label="SQL" prop="COMMAND" align="center" header-align="center"></el-table-column>
         <el-table-column label="执行进度百分比" prop="PERCENT" align="center" header-align="center"></el-table-column>
         <el-table-column label="剩余时间" prop="REMAINTIME" align="center" header-align="center"></el-table-column>
+        <el-table-column label="操作" align="center" header-align="center">
+          <template slot-scope="scope">
+            <el-button
+                type="warning"
+                icon="iconfont icon-zhihang"
+                size="mini"
+                @click="pause_osc(scope.row.SQLSHA1)"
+            >暂停
+            </el-button>
+            <el-button
+                type="primary"
+                icon="iconfont icon-zhihang"
+                size="mini"
+                @click="resume_osc(scope.row.SQLSHA1)"
+            >恢复
+            </el-button>
+            <el-button
+                type="danger"
+                icon="iconfont icon-bohui"
+                size="mini"
+                @click="kill_osc(scope.row.SQLSHA1)"
+            >终止
+            </el-button>
+          </template>
+        </el-table-column>
       </el-table>
       <el-button type="primary" @click="get_workorder();get_osc()">刷新
       </el-button>
@@ -94,6 +120,7 @@
 </template>
 <script>
 import hljs from "highlight.js";
+import sqlFormatter from "sql-formatter";
 
 export default {
   inject: ['reload'],
@@ -173,11 +200,11 @@ export default {
       if (res.msg != "success") return this.$message.error("获取工单失败");
       this.tableData = res.data;
       this.total = res.total;
-      this.tableData.forEach(item => {
-        item.sql.forEach(i => {
-          i.sql = hljs.highlight("sql", i.sql).value;
-        });
-      });
+      // this.tableData.forEach(item => {
+      //   item.sql.forEach(i => {
+      //     i.sql = hljs.highlight("sql", i.sql).value;
+      //   });
+      // });
     },
     async get_osc() {
       const {data: res} = await this.$ajax
@@ -193,6 +220,46 @@ export default {
       this.ocstableData.forEach(item => {
         // item.COMMAND = hljs.highlight("sql", item.COMMAND).value;
         item.PERCENT = item.PERCENT + "%";
+      });
+    },
+    async pause_osc(SQLSHA1) {
+      const {data: res} = await this.$ajax
+          .post(`/pause_osc/`, {"SQLSHA1": SQLSHA1})
+          .catch(() => {
+            return this.$notify.error({
+              title: "错误",
+              message: "发起暂停osc请求失败"
+            });
+          });
+      if (res.msg != "success") return this.$message.error("暂停osc失败");
+    },
+    async resume_osc(SQLSHA1) {
+      const {data: res} = await this.$ajax
+          .post(`/resume_osc/`, {"SQLSHA1": SQLSHA1})
+          .catch(() => {
+            return this.$notify.error({
+              title: "错误",
+              message: "发起恢复osc请求失败"
+            });
+          });
+      if (res.msg != "success") return this.$message.error("恢复osc失败");
+    },
+    async kill_osc(SQLSHA1) {
+      const {data: res} = await this.$ajax
+          .post(`/kill_osc/`, {"SQLSHA1": SQLSHA1})
+          .catch(() => {
+            return this.$notify.error({
+              title: "错误",
+              message: "发起终止osc请求失败"
+            });
+          });
+      if (res.msg != "success") return this.$message.error("终止osc失败");
+    },
+    async alert_sql(sql) {
+      sql = sqlFormatter.format(sql);
+      sql = hljs.highlight("sql", sql).value;
+      this.$alert('<pre>' + sql + '</pre>', 'sql', {
+        dangerouslyUseHTMLString: true,
       });
     },
   }
