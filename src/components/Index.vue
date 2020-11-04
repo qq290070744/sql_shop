@@ -2,17 +2,17 @@
   <el-container>
     <el-header>
       <div>
-        <img src="../assets/timg.jpg" />
+        <img src="../assets/timg.jpg"/>
         <span>MySQL运维管理平台</span>
       </div>
       <div>
         <el-menu
-          class="el-menu-demo"
-          mode="horizontal"
-          @select="handleSelect"
-          background-color="#3c7799"
-          text-color="#fff"
-          active-text-color="#ffd04b"
+            class="el-menu-demo"
+            mode="horizontal"
+            @select="handleSelect"
+            background-color="#3c7799"
+            text-color="#fff"
+            active-text-color="#ffd04b"
         >
           <el-badge :is-dot="count==0 || !count ? false:true">
             <el-submenu index="1">
@@ -22,11 +22,14 @@
               </template>
               <el-menu-item index="1-1" @click="toPending" v-if="isShow">
                 <el-badge
-                  :value="count==0 || !count ? 0:count"
-                  :hidden="count==0 || !count ? true:false"
+                    :value="count==0 || !count ? 0:count"
+                    :hidden="count==0 || !count ? true:false"
                 >
                   <i class="iconfont icon-daishenpizhishi" style="margin-right:10px"></i>待审批
                 </el-badge>
+              </el-menu-item>
+              <el-menu-item index="1-2" @click="dialogFormVisible = true">
+                <i class="el-icon-goods" style="margin-right:10px"></i>修改密码
               </el-menu-item>
               <el-menu-item index="1-2" @click="logout">
                 <i class="iconfont icon-tuichudenglu" style="margin-right:10px"></i>退出
@@ -42,13 +45,13 @@
           <i :class="rlicon"></i>
         </div>
         <el-menu
-          class="aside_menu"
-          @select="handleSelect"
-          :unique-opened="true"
-          :collapse="isCollapse"
-          :default-active="activeIndex"
-          background-color="#3c7792"
-          router
+            class="aside_menu"
+            @select="handleSelect"
+            :unique-opened="true"
+            :collapse="isCollapse"
+            :default-active="activeIndex"
+            background-color="#3c7792"
+            router
         >
           <el-submenu :index="item.id+''" v-for="item in menulist" :key="item.id">
             <template slot="title">
@@ -69,6 +72,20 @@
         <router-view></router-view>
       </el-main>
     </el-container>
+
+    <el-dialog title="修改密码" :visible.sync="dialogFormVisible">
+      <el-form :model="form" status-icon :rules="rules" ref="ruleForm" label-width="100px" class="demo-ruleForm">
+        <el-form-item label="新密码" prop="password">
+          <el-input v-model='form.password' class="input" prefix-icon="el-icon-key"
+                    placeholder="请输入密码"
+                    show-password></el-input>
+        </el-form-item>
+      </el-form>
+      <div slot="footer" class="dialog-footer">
+        <el-button @click="dialogFormVisible = false">取 消</el-button>
+        <el-button type="primary" @click="dialogFormVisible = false;mod_password()">确 定</el-button>
+      </div>
+    </el-dialog>
   </el-container>
 </template>
 
@@ -85,7 +102,20 @@ export default {
       rlicon: "el-icon-d-arrow-left",
       activeIndex: "0",
       count: 0,
-      isShow:true,
+      isShow: true,
+      dialogFormVisible: false,
+      form: {
+        name: '',
+        region: '',
+        date1: '',
+        date2: '',
+        delivery: false,
+        type: [],
+        resource: '',
+        desc: '',
+        password: ''
+      },
+      formLabelWidth: '120px'
     };
   },
   created() {
@@ -103,21 +133,21 @@ export default {
     rl() {
       this.isCollapse ? (this.isCollapse = false) : (this.isCollapse = true);
       this.isCollapse
-        ? (this.rlicon = "el-icon-d-arrow-right")
-        : (this.rlicon = "el-icon-d-arrow-left");
+          ? (this.rlicon = "el-icon-d-arrow-right")
+          : (this.rlicon = "el-icon-d-arrow-left");
     },
     logout() {
       window.sessionStorage.clear();
       this.$router.push("/login");
     },
     async get_pendingOrder() {
-      const { data: res } = await this.$ajax.get("/pending/?offset=0&limit=1");
-      if(res.isemp) this.isShow=false
+      const {data: res} = await this.$ajax.get("/pending/?offset=0&limit=1");
+      if (res.isemp) this.isShow = false
       this.count = res.total;
     },
     async get_menu() {
       // console.log(this)
-      const { data: res } = await this.$ajax.post("/menu").catch(error => {
+      const {data: res} = await this.$ajax.post("/menu").catch(error => {
         this.$message({
           type: "error",
           center: true,
@@ -128,6 +158,21 @@ export default {
       if (!res) this.$message.error("菜单获取失败");
       this.menulist = res.data;
       // console.log(this.menulist)
+    },
+    async mod_password() {
+      const {data: res} = await this.$ajax
+          .post("/mod_password/", this.form)
+          .catch(() => {
+            this.$notify.error({
+              title: "错误",
+              message: "提交失败"
+            });
+          });
+      if (res.msg != "success") return this.$message.error("密码修改失败");
+      this.$message({
+        message: '恭喜你，修改成功',
+        type: 'success'
+      });
     }
   }
 };
@@ -137,9 +182,11 @@ export default {
 .el-badge {
   display: flex;
 }
+
 .p_class {
   margin-right: 10px;
 }
+
 .el-container {
   height: 100%;
 
@@ -176,7 +223,7 @@ export default {
         margin-left: 45%;
         cursor: pointer;
       }
-      
+
     }
 
     .aside_menu {
@@ -200,12 +247,13 @@ export default {
   }
 }
 </style>
-<style  >
+<style>
 .el-badge__content.is-dot {
   margin-top: 10px !important;
 }
-.iconfont{
-        margin-right: 5px ;
-        margin-left: 3px;
-      }
+
+.iconfont {
+  margin-right: 5px;
+  margin-left: 3px;
+}
 </style>
