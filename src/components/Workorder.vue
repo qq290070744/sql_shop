@@ -52,7 +52,12 @@
                   </el-steps>
                 </template>
               </el-table-column>
-              <el-table-column label="备注" prop="remark"></el-table-column>
+              <el-table-column label="备注" >
+                <template slot-scope="scope">
+                  <pre><div v-html="scope.row.remark.slice(0,100)"></div></pre>
+                  <el-button type="primary" @click="alert_remark(scope.row.remark);" size="mini" round>查看全部</el-button>
+                </template>
+              </el-table-column>
             </el-table>
           </template>
         </el-table-column>
@@ -127,7 +132,12 @@ export default {
       this.$alert('<pre>' + sql + '</pre>', 'sql', {
         dangerouslyUseHTMLString: true,
       });
-    }
+    },
+    async alert_remark(remark) {
+      this.$alert('<pre>' + remark + '</pre>', 'remark', {
+        dangerouslyUseHTMLString: true,
+      });
+    },
   }
 };
 </script>
