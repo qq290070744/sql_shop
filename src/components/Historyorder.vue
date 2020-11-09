@@ -48,7 +48,7 @@
               <el-table-column label="备注" header-align="center">
                 <template slot-scope="scope">
                   <pre><div v-html="scope.row.remark.slice(0,100)"></div></pre>
-                  <el-button type="primary" @click="alert_remark(scope.row.remark);" size="mini" round>查看全部</el-button>
+                  <el-button type="primary" @click="alert_remark(scope.row.remark.slice(0,1000));" size="mini" round>查看全部</el-button>
                 </template>
               </el-table-column>
               <el-table-column label="操作" align="center" header-align="center">
