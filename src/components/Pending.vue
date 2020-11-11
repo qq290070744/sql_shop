@@ -103,6 +103,41 @@
           </template>
         </el-table-column>
       </el-table>
+
+      <h1>待审批数据导出工单列表</h1>
+      <el-table :data="data_export_tableData" style="width: 100%" border stripe>
+        <el-table-column label="#" type="index" align="center" header-align="center"></el-table-column>
+        <el-table-column label="发起人" prop="sponsor" align="center" header-align="center"></el-table-column>
+        <el-table-column label="实例名称" prop="ins_name" align="center" header-align="center"></el-table-column>
+        <el-table-column label="实例地址" prop="host" align="center" header-align="center"></el-table-column>
+        <el-table-column label="数据库" prop="dbname" align="center" header-align="center"></el-table-column>
+        <el-table-column label="sql" prop="sql" align="center" header-align="center">
+          <template slot-scope="scope">
+            <pre><div v-html="scope.row.sql"></div></pre>
+            <el-button type="primary" @click="alert_sql(scope.row.sql);" size="mini" round>查看全部sql</el-button>
+          </template>
+        </el-table-column>
+        <el-table-column label="发起时间" prop="create_time" align="center" header-align="center"></el-table-column>
+        <el-table-column label="操作" align="center" header-align="center">
+          <template slot-scope="scope">
+            <el-button
+                type="primary"
+                icon="iconfont icon-zhihang"
+                size="mini"
+                @click="resume_osc(scope.row.SQLSHA1)"
+            >通过
+            </el-button>
+            <el-button
+                type="danger"
+                icon="iconfont icon-bohui"
+                size="mini"
+                @click="kill_osc(scope.row.SQLSHA1)"
+            >驳回
+            </el-button>
+          </template>
+        </el-table-column>
+      </el-table>
+
       <el-button type="primary" @click="get_workorder();get_osc()">刷新
       </el-button>
       <el-pagination
@@ -130,12 +165,14 @@ export default {
       offset: 1,
       limit: 5,
       total: 0,
-      ocstableData: []
+      ocstableData: [],
+      data_export_tableData: [],
     };
   },
   mounted() {
     this.get_workorder();
     this.get_osc();
+    this.get_workorder_data_export();
   },
   methods: {
     handleSizeChange(val) {
@@ -179,7 +216,7 @@ export default {
                 });
             if (res.msg != "success") return this.$message.error("驳回操作失败");
             this.$message.success("已驳回该工单");
-            this.get_workorder();
+            await this.get_workorder();
           })
           .catch(() => {
             this.$message({
@@ -261,6 +298,24 @@ export default {
       this.$alert('<pre>' + sql + '</pre>', 'sql', {
         dangerouslyUseHTMLString: true,
       });
+    },
+    async get_workorder_data_export() {
+      const {data: res} = await this.$ajax
+          .get(`/data_export_pending/?offset=${this.offset}&limit=${this.limit}`)
+          .catch(() => {
+            return this.$notify.error({
+              title: "错误",
+              message: "发起请求工单失败"
+            });
+          });
+      if (res.msg != "success") return this.$message.error("获取工单失败");
+      this.data_export_tableData = res.data;
+      this.total = res.total;
+      // this.tableData.forEach(item => {
+      //   item.sql.forEach(i => {
+      //     i.sql = hljs.highlight("sql", i.sql).value;
+      //   });
+      // });
     },
   }
 };

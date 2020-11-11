@@ -88,6 +88,7 @@
           <el-col :span="6">
             <el-button type="info" @click="resetForm('queryRef')">重置</el-button>
             <el-button type="primary" @click="commitForm('queryRef')">提交</el-button>
+            <el-button type="primary" @click="dialogFormVisible_data_export = true">查询数据导出</el-button>
           </el-col>
         </el-row>
       </el-form>
@@ -125,6 +126,7 @@
         ></el-pagination>
       </div>
     </el-card>
+
     <el-dialog title="SQL审核结果" :visible="dialogVisible" width="75%" @close="closeDialog">
       <div
           style="min-height: 500px"
@@ -142,6 +144,36 @@
         </el-row>
       </div>
     </el-dialog>
+
+    <el-dialog title="查询数据导出" :visible.sync="dialogFormVisible_data_export">
+      <el-form :model="queryInfo" ref="queryRef1">
+        <el-form-item label="审批主管: " prop="manager" label-width="150px">
+          <el-select placeholder="请选择审批主管" style="width: 250px;" v-model="queryInfo.manager">
+            <el-option
+                v-for="item in manager"
+                :key="item.id"
+                :value="item.id"
+                :label="item.username"
+            ></el-option>
+          </el-select>
+        </el-form-item>
+        <el-form-item label="审批DBA: " prop="dba" label-width="150px">
+          <el-select placeholder="请选择审批DBA" style="width: 250px;" v-model="queryInfo.dba">
+            <el-option
+                v-for="item in dba"
+                :key="item.id"
+                :value="item.id"
+                :label="item.username"
+            ></el-option>
+          </el-select>
+        </el-form-item>
+      </el-form>
+      <div slot="footer" class="dialog-footer">
+        <el-button @click="dialogFormVisible_data_export = false">取 消</el-button>
+        <el-button type="primary" @click="sumit_data_export('queryRef','queryRef1')">提交导出工单</el-button>
+      </div>
+    </el-dialog>
+
   </div>
 </template>
 
@@ -171,7 +203,9 @@ export default {
         sql: "",
         offset: 1,
         limit: 5,
-        limit2: 1
+        limit2: 1,
+        manager: "",
+        dba: ""
       },
       activeName: "",
       switchValue: true,
@@ -198,20 +232,32 @@ export default {
       tabs: [],
       desc: "",
       dialogVisible: false,
+      dialogFormVisible_data_export: false,
       result: "",
       loading: true,
       tableData: [],
       total: 0,
       tableLabel: [],
       isRet: false,
-      isFetching: true
+      isFetching: true,
+      manager: [],
+      dba: []
     };
   },
   mounted() {
     this.get_ins();
     this.init();
+    this.get_approver();
   },
   methods: {
+    async get_approver() {
+      const {data: res} = await this.$ajax.get("/get_approver/").catch(() => {
+        return this.$notify.error({title: "错误", message: "请求审批人失败"});
+      });
+      if (res.msg != "success") return this.$message.error("获取审批人失败");
+      this.manager = res.data.manager;
+      this.dba = res.data.dba;
+    },
     handleCurrentChange(val) {
       console.log(this.queryInfo.offset);
       this.queryInfo.offset = val;
@@ -241,6 +287,27 @@ export default {
         this.tableLabel = Object.keys(res.data[0]);
       }
       this.isFetching = false;
+    },
+    async sumit_data_export(form, form1) {
+      this.$refs[form].validate(async valid => {
+        if (!valid) return this.$message.error("请选择/填写必要项");
+        this.$refs[form1].validate(async valid => {
+          if (!valid) return this.$message.error("请选择/填写必要项");
+        })
+        const {data: res} = await this.$ajax
+            .post("/submit_workorder_data_export/", this.queryInfo)
+            .catch(() => {
+              this.$notify.error({title: "错误", message: "请求失败"});
+            });
+        if (res.msg !== "success") {
+          this.isRet = false;
+          return this.$message.error(res.msg);
+        }
+        this.$message({
+          type: "success",
+          message: "提交数据导出工单成功!"
+        });
+      })
     },
     async closeDialog() {
       this.dialogVisible = false;
