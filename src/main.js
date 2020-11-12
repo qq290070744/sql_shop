@@ -1,7 +1,9 @@
 import Vue from 'vue'
 import App from './App.vue'
 import router from './router'
-import './plugins/element.js'
+// import './plugins/element.js'
+import ElementUI from 'element-ui';
+import 'element-ui/lib/theme-chalk/index.css';
 import {formatTimeToStr} from './plugins/dateformat'
 
 import './assets/css/global.css'
@@ -20,8 +22,7 @@ import "codemirror/addon/hint/sql-hint"
 import "codemirror/addon/display/placeholder"
 import echarts from 'echarts'
 
-
-
+Vue.use(ElementUI);
 
 
 //这两行的位置很重要，很重要，重要

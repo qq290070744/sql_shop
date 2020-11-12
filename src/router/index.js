@@ -13,6 +13,8 @@ import Pending from '../components/Pending'
 import Historyorder from '../components/Historyorder'
 import Inception_show_variables from "@/components/Inception_show_variables";
 import Inception_show_levels from "@/components/Inception_show_levels";
+import Workorder_data_export from "@/components/Workorder_data_export";
+import Historyorder_data_export from "@/components/Historyorder_data_export";
 
 Vue.use(VueRouter)
 
@@ -44,7 +46,7 @@ const routes = [
             },
             {
                 path: '/inspect',
-                name: 'DDL审核',
+                name: 'SQL审核',
                 component: Inspect
             },
             {
@@ -64,8 +66,13 @@ const routes = [
             },
             {
                 path: '/workorder',
-                name: '我的工单',
+                name: '我的SQL工单',
                 component: Workorder
+            },
+            {
+                path: '/workorder_data_export',
+                name: '我的数据导出工单',
+                component: Workorder_data_export
             },
             {
                 path: '/pending',
@@ -74,8 +81,13 @@ const routes = [
             },
             {
                 path: '/historyorder',
-                name: '历史工单',
+                name: '历史SQL工单',
                 component: Historyorder
+            },
+            {
+                path: '/historyorder_data_export',
+                name: '历史数据导出工单',
+                component: Historyorder_data_export
             },
             {
                 path: '/inception_show_variables',

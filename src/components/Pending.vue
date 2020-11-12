@@ -124,14 +124,14 @@
                 type="primary"
                 icon="iconfont icon-zhihang"
                 size="mini"
-                @click="resume_osc(scope.row.SQLSHA1)"
+                @click="mod_data_export_status(scope.row.id,1)"
             >通过
             </el-button>
             <el-button
                 type="danger"
                 icon="iconfont icon-bohui"
                 size="mini"
-                @click="kill_osc(scope.row.SQLSHA1)"
+                @click="mod_data_export_status(scope.row.id,2)"
             >驳回
             </el-button>
           </template>
@@ -311,12 +311,20 @@ export default {
       if (res.msg != "success") return this.$message.error("获取工单失败");
       this.data_export_tableData = res.data;
       this.total = res.total;
-      // this.tableData.forEach(item => {
-      //   item.sql.forEach(i => {
-      //     i.sql = hljs.highlight("sql", i.sql).value;
-      //   });
-      // });
     },
+    async mod_data_export_status(id, status) {
+      const {data: res} = await this.$ajax
+          .post(`/mod_data_export_status/`, {"id": id, "status": status})
+          .catch(() => {
+            return this.$notify.error({
+              title: "错误",
+              message: "发起请求失败"
+            });
+          });
+      if (res.msg != "success") return this.$message.error("请求失败");
+      this.$message.success("成功");
+      await this.get_workorder_data_export();
+    }
   }
 };
 </script>

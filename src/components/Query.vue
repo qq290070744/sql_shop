@@ -289,24 +289,31 @@ export default {
       this.isFetching = false;
     },
     async sumit_data_export(form, form1) {
+      this.queryInfo.offset = 1;
+      this.queryInfo.limit = 5;
+      this.tableData = [];
+      this.tableLabel = [];
+      this.total = 0;
+      this.queryInfo.sql = this.editor.getValue();
       this.$refs[form].validate(async valid => {
         if (!valid) return this.$message.error("请选择/填写必要项");
         this.$refs[form1].validate(async valid => {
           if (!valid) return this.$message.error("请选择/填写必要项");
+          const {data: res} = await this.$ajax
+              .post("/submit_workorder_data_export/", this.queryInfo)
+              .catch(() => {
+                this.$notify.error({title: "错误", message: "请求失败"});
+              });
+          if (res.msg !== "success") {
+            this.isRet = false;
+            return this.$message.error(res.msg);
+          }
+          this.$message({
+            type: "success",
+            message: "提交数据导出工单成功!"
+          });
         })
-        const {data: res} = await this.$ajax
-            .post("/submit_workorder_data_export/", this.queryInfo)
-            .catch(() => {
-              this.$notify.error({title: "错误", message: "请求失败"});
-            });
-        if (res.msg !== "success") {
-          this.isRet = false;
-          return this.$message.error(res.msg);
-        }
-        this.$message({
-          type: "success",
-          message: "提交数据导出工单成功!"
-        });
+
       })
     },
     async closeDialog() {
