@@ -312,6 +312,7 @@ export default {
             type: "success",
             message: "提交数据导出工单成功!"
           });
+          this.dialogFormVisible_data_export = false
         })
 
       })
