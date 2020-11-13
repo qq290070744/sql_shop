@@ -203,7 +203,7 @@ export default {
         sql: "",
         offset: 1,
         limit: 5,
-        limit2: 1,
+        limit2: 5,
         manager: "",
         dba: ""
       },
