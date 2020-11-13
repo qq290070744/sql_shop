@@ -74,7 +74,13 @@
         <el-table-column label="#" type="index" align="center" header-align="center"></el-table-column>
         <el-table-column label="数据库名" prop="DBNAME" align="center" header-align="center"></el-table-column>
         <el-table-column label="表名" prop="TABLENAME" align="center" header-align="center"></el-table-column>
-        <el-table-column label="SQL" prop="COMMAND" align="center" header-align="center"></el-table-column>
+        <!--        <el-table-column label="SQL" prop="COMMAND" align="center" header-align="center"></el-table-column>-->
+        <el-table-column label="SQL" header-align="center">
+          <template slot-scope="scope">
+            <pre><div v-html="scope.row.COMMAND"></div></pre>
+            <el-button type="primary" @click="alert_sql(scope.row.COMMAND);" size="mini" round>查看全部sql</el-button>
+          </template>
+        </el-table-column>
         <el-table-column label="执行进度百分比" prop="PERCENT" align="center" header-align="center"></el-table-column>
         <el-table-column label="剩余时间" prop="REMAINTIME" align="center" header-align="center"></el-table-column>
         <el-table-column label="操作" align="center" header-align="center">
@@ -138,7 +144,7 @@
         </el-table-column>
       </el-table>
 
-      <el-button type="primary" @click="get_workorder();get_osc()">刷新
+      <el-button type="primary" @click="get_workorder();get_osc()">手动刷新
       </el-button>
       <el-pagination
           @size-change="handleSizeChange"
@@ -167,12 +173,17 @@ export default {
       total: 0,
       ocstableData: [],
       data_export_tableData: [],
+      timer: '',
     };
   },
   mounted() {
     this.get_workorder();
     this.get_osc();
     this.get_workorder_data_export();
+    this.timer = setInterval(this.get_osc, 10000);
+  },
+  beforeDestroy() {
+    clearInterval(this.timer);
   },
   methods: {
     handleSizeChange(val) {
