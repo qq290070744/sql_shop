@@ -14,7 +14,7 @@
         <el-table-column label="数据库" prop="dbname" align="center" header-align="center"></el-table-column>
         <el-table-column label="sql" align="center" header-align="center">
           <template slot-scope="scope">
-            <pre><div v-html="scope.row.sql"></div></pre>
+            <pre><div v-html="scope.row.sql.slice(0,100)"></div></pre>
             <el-button type="primary" @click="alert_sql(scope.row.sql);" size="mini" round>查看全部sql</el-button>
           </template>
         </el-table-column>
