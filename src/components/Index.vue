@@ -142,8 +142,10 @@ export default {
     },
     async get_pendingOrder() {
       const {data: res} = await this.$ajax.get("/pending/?offset=0&limit=1");
+      const {data: res1} = await this.$ajax.get("/data_export_pending/?offset=0&limit=1");
       if (res.isemp) this.isShow = false
-      this.count = res.total;
+      this.count += res.total;
+      this.count += res1.total;
     },
     async get_menu() {
       // console.log(this)

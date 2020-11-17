@@ -458,6 +458,7 @@ export default {
         message: '清理成功',
         type: 'success'
       });
+      this.dialogVisibleBinlog = false
     },
   }
 };

@@ -146,7 +146,7 @@
     </el-dialog>
 
     <el-dialog title="查询数据导出" :visible.sync="dialogFormVisible_data_export">
-      <el-form :model="queryInfo" ref="queryRef1">
+      <el-form :model="queryInfo" ref="queryRef1" :rules="queryRules1">
         <el-form-item label="审批主管: " prop="manager" label-width="150px">
           <el-select placeholder="请选择审批主管" style="width: 250px;" v-model="queryInfo.manager">
             <el-option
@@ -228,6 +228,10 @@ export default {
           message: "必须要选择限制条数",
           trigger: "change"
         }
+      },
+      queryRules1: {
+        manager: {required: true, message: "选择主管", trigger: "blur"},
+        dba: {required: true, message: "选择dba", trigger: "blur"}
       },
       tabs: [],
       desc: "",

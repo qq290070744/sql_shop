@@ -154,8 +154,8 @@ export default {
           trigger: "change"
         },
         sql: {required: true, message: "SQL不可为空", trigger: "blur"},
-        manager: {required: true, message: "SQL不可为空", trigger: "blur"},
-        dba: {required: true, message: "SQL不可为空", trigger: "blur"}
+        manager: {required: true, message: "选择主管", trigger: "blur"},
+        dba: {required: true, message: "选择dba", trigger: "blur"}
       },
       tabs: [],
       desc: "",
