@@ -75,6 +75,11 @@
 
     <el-dialog title="修改密码" :visible.sync="dialogFormVisible">
       <el-form :model="form" status-icon :rules="rules" ref="ruleForm" label-width="100px" class="demo-ruleForm">
+        <el-form-item label="旧密码" prop="oldpassword">
+          <el-input v-model='form.oldpassword' class="input" prefix-icon="el-icon-key"
+                    placeholder="请输入密码"
+                    show-password></el-input>
+        </el-form-item>
         <el-form-item label="新密码" prop="password">
           <el-input v-model='form.password' class="input" prefix-icon="el-icon-key"
                     placeholder="请输入密码"
@@ -113,7 +118,8 @@ export default {
         type: [],
         resource: '',
         desc: '',
-        password: ''
+        password: '',
+        oldpassword: ''
       },
       formLabelWidth: '120px'
     };
@@ -170,7 +176,7 @@ export default {
               message: "提交失败"
             });
           });
-      if (res.msg != "success") return this.$message.error("密码修改失败");
+      if (res.msg !== "success") return this.$message.error(res.msg);
       this.$message({
         message: '恭喜你，修改成功',
         type: 'success'
