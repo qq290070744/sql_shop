@@ -15,6 +15,7 @@ import Inception_show_variables from "@/components/Inception_show_variables";
 import Inception_show_levels from "@/components/Inception_show_levels";
 import Workorder_data_export from "@/components/Workorder_data_export";
 import Historyorder_data_export from "@/components/Historyorder_data_export";
+import Desensitization_info from "@/components/Desensitization_info";
 
 Vue.use(VueRouter)
 
@@ -98,6 +99,11 @@ const routes = [
                 path: '/inception_show_levels',
                 name: '自定义审核级别',
                 component: Inception_show_levels
+            },
+            {
+                path: '/get_desensitization_info_list',
+                name: '获取脱敏字段列表',
+                component: Desensitization_info
             },
         ]
     }

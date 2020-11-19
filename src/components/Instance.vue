@@ -263,7 +263,7 @@ export default {
       },
       formRule: {
         ins_name: [
-          {required: true, message: "请输入活动名称", trigger: "blur"}
+          {required: true, message: "请输入实例名称", trigger: "blur"}
         ],
         host: [
           {required: true, message: "请输入服务器地址", trigger: "blur"},
