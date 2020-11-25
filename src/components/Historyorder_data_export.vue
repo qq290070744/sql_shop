@@ -37,6 +37,7 @@
           </template>
         </el-table-column>
         <el-table-column label="发起时间" prop="create_time" align="center" header-align="center"></el-table-column>
+        <el-table-column label="工单说明" prop="remark" align="center" header-align="center"></el-table-column>
       </el-table>
       <el-pagination
           @size-change="handleSizeChange"

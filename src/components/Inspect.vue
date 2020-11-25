@@ -66,6 +66,13 @@
           </el-col>
         </el-row>
         <el-row>
+          <el-col :span="16">
+            <el-form-item label="工单说明: " prop="remark" label-width="150px">
+              <textarea v-model="queryInfo.remark" rows="3"  style="width: 75%;"></textarea>
+            </el-form-item>
+          </el-col>
+        </el-row>
+        <el-row>
           <el-col :span="17">
             <el-form-item label="SQL:" prop="sql">
               <textarea ref="mycode" v-model="queryInfo.sql" rows="20"></textarea>
@@ -137,7 +144,8 @@ export default {
         selectDb: "",
         sql: "",
         manager: "",
-        dba: ""
+        dba: "",
+        remark: ""
       },
       activeName: "",
       options: [],
@@ -155,7 +163,8 @@ export default {
         },
         sql: {required: true, message: "SQL不可为空", trigger: "blur"},
         manager: {required: true, message: "选择主管", trigger: "blur"},
-        dba: {required: true, message: "选择dba", trigger: "blur"}
+        dba: {required: true, message: "选择dba", trigger: "blur"},
+        remark: {required: true, message: "工单说明不能为空", trigger: "blur"},
       },
       tabs: [],
       desc: "",

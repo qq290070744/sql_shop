@@ -16,6 +16,7 @@ import Inception_show_levels from "@/components/Inception_show_levels";
 import Workorder_data_export from "@/components/Workorder_data_export";
 import Historyorder_data_export from "@/components/Historyorder_data_export";
 import Desensitization_info from "@/components/Desensitization_info";
+import Slowlog_list from "@/components/Slowlog_list";
 
 Vue.use(VueRouter)
 
@@ -104,6 +105,11 @@ const routes = [
                 path: '/get_desensitization_info_list',
                 name: '获取脱敏字段列表',
                 component: Desensitization_info
+            },
+            {
+                path: '/get_slowlog_list',
+                name: '慢日志列表',
+                component: Slowlog_list
             },
         ]
     }

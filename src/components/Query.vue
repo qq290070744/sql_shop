@@ -167,6 +167,10 @@
             ></el-option>
           </el-select>
         </el-form-item>
+        <el-form-item label="导出说明: " prop="remark" label-width="150px">
+          <textarea style="width: 250px;" v-model="queryInfo.remark" rows="5">
+          </textarea>
+        </el-form-item>
       </el-form>
       <div slot="footer" class="dialog-footer">
         <el-button @click="dialogFormVisible_data_export = false">取 消</el-button>
@@ -205,7 +209,8 @@ export default {
         limit: 5,
         limit2: 5,
         manager: "",
-        dba: ""
+        dba: "",
+        remark: "",
       },
       activeName: "",
       switchValue: true,
@@ -231,7 +236,8 @@ export default {
       },
       queryRules1: {
         manager: {required: true, message: "选择主管", trigger: "blur"},
-        dba: {required: true, message: "选择dba", trigger: "blur"}
+        dba: {required: true, message: "选择dba", trigger: "blur"},
+        remark: {required: true, message: "必须填写导出说明", trigger: "blur"},
       },
       tabs: [],
       desc: "",
