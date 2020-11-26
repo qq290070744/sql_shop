@@ -17,6 +17,7 @@ import Workorder_data_export from "@/components/Workorder_data_export";
 import Historyorder_data_export from "@/components/Historyorder_data_export";
 import Desensitization_info from "@/components/Desensitization_info";
 import Slowlog_list from "@/components/Slowlog_list";
+import Query_log from "@/components/Query_log";
 
 Vue.use(VueRouter)
 
@@ -110,6 +111,11 @@ const routes = [
                 path: '/get_slowlog_list',
                 name: '慢日志列表',
                 component: Slowlog_list
+            },
+            {
+                path: '/get_query_log',
+                name: '历史查询记录',
+                component: Query_log
             },
         ]
     }
