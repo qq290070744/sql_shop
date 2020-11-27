@@ -31,6 +31,9 @@ export default {
 <style>
 
 .el-message-box {
-  width: auto!important;
+  width: 1000px !important;
+  max-height: 80% !important;
+  overflow: auto !important;
 }
+
 </style>
