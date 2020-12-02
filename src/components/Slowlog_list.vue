@@ -67,7 +67,7 @@
             :prop="item"
             :label="item"
             show-overflow-tooltip
-            >
+        >
         </el-table-column>
       </el-table>
       <el-pagination
@@ -125,37 +125,22 @@ export default {
       },
       datetimevalue: [],
       tableLabel: [],
+      search_value: 'get_slowlog',
     };
   },
   mounted() {
-    this.get_slowlog_list();
+    this.search_(this.search_value);
     this.get_ins();
   },
   methods: {
     handleSizeChange(val) {
       this.offset = 1;
       this.limit = val;
-      this.get_slowlog_list();
+      this.search_(this.search_value);
     },
     handleCurrentChange(val) {
       this.offset = val;
-      this.get_slowlog_list();
-    },
-    async get_slowlog_list() {
-      const {data: res} = await this.$ajax
-          .get(`/get_slowlog?offset=${this.offset}&limit=${this.limit}`)
-          .catch(() => {
-            return this.$notify.error({
-              title: "错误",
-              message: "发起请求失败"
-            });
-          });
-      if (res.msg !== "success") return this.$message.error("获取失败");
-      this.tableData = res.data;
-      this.total = res.total;
-      if (res.total !== 0) {
-        this.tableLabel = Object.keys(res.data[0]);
-      }
+      this.search_(this.search_value);
     },
     async alert_sql(sql) {
       sql = sqlFormatter.format(sql);
@@ -165,6 +150,7 @@ export default {
       });
     },
     async search_(search_name) {
+      this.search_value = search_name
       let dbid = this.dbid
       if (this.dbid === '') {
         dbid = 0
