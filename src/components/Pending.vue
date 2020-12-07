@@ -10,6 +10,13 @@
       <el-table :data="tableData" style="width: 100%" border stripe>
         <el-table-column type="expand">
           <template slot-scope="props">
+            <el-button
+                type="success"
+                icon="iconfont icon-zhihang"
+                size="medium"
+                @click="exec_all_sql(props.row.sql)"
+            >全部执行
+            </el-button>
             <el-table :data="props.row.sql" size="mini" border stripe>
               <el-table-column label="#" type="index" align="center" header-align="center"></el-table-column>
               <el-table-column label="SQL" header-align="center">
@@ -334,9 +341,15 @@ export default {
               message: "发起请求失败"
             });
           });
-      if (res.msg != "success") return this.$message.error("请求失败");
+      if (res.msg !== "success") return this.$message.error("请求失败");
       this.$message.success("成功");
       await this.get_workorder_data_export();
+    },
+    async exec_all_sql(row) {
+      for (const i in row) {
+        // console.log(row[i])
+        await this.commitOrder(row[i])
+      }
     }
   }
 };
