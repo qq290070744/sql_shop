@@ -17,6 +17,13 @@
                 @click="exec_all_sql(props.row.sql)"
             >全部执行
             </el-button>
+            <el-button
+                type="danger"
+                icon="iconfont icon-zhihang"
+                size="medium"
+                @click="rejectOrder_all(props.row.sql)"
+            >全部驳回
+            </el-button>
             <el-table :data="props.row.sql" size="mini" border stripe>
               <el-table-column label="#" type="index" align="center" header-align="center"></el-table-column>
               <el-table-column label="SQL" header-align="center">
@@ -214,8 +221,8 @@ export default {
               message: "发起SQL执行操作失败"
             });
           });
-      if (res.msg != "success" || !res.msg) return this.$message.error(res.msg);
-      this.get_workorder();
+      if (res.msg !== "success" || !res.msg) return this.$message.error(res.msg);
+      await this.get_workorder();
       this.$message.success("SQL已放后台执行中，请稍后刷新页面查看是否执行完成！");
     },
     rejectOrder(row) {
@@ -234,7 +241,7 @@ export default {
                     message: "发起驳回操作失败"
                   });
                 });
-            if (res.msg != "success") return this.$message.error("驳回操作失败");
+            if (res.msg !== "success") return this.$message.error("驳回操作失败");
             this.$message.success("已驳回该工单");
             await this.get_workorder();
           })
@@ -254,7 +261,7 @@ export default {
               message: "发起请求工单失败"
             });
           });
-      if (res.msg != "success") return this.$message.error("获取工单失败");
+      if (res.msg !== "success") return this.$message.error("获取工单失败");
       this.tableData = res.data;
       this.total = res.total;
       // this.tableData.forEach(item => {
@@ -272,7 +279,7 @@ export default {
               message: "发起请求osc失败"
             });
           });
-      if (res.msg != "success") return this.$message.error("获取osc失败");
+      if (res.msg !== "success") return this.$message.error("获取osc失败");
       this.ocstableData = res.data;
       this.ocstableData.forEach(item => {
         // item.COMMAND = hljs.highlight("sql", item.COMMAND).value;
@@ -288,7 +295,7 @@ export default {
               message: "发起暂停osc请求失败"
             });
           });
-      if (res.msg != "success") return this.$message.error("暂停osc失败");
+      if (res.msg !== "success") return this.$message.error("暂停osc失败");
     },
     async resume_osc(SQLSHA1) {
       const {data: res} = await this.$ajax
@@ -299,7 +306,7 @@ export default {
               message: "发起恢复osc请求失败"
             });
           });
-      if (res.msg != "success") return this.$message.error("恢复osc失败");
+      if (res.msg !== "success") return this.$message.error("恢复osc失败");
     },
     async kill_osc(SQLSHA1) {
       const {data: res} = await this.$ajax
@@ -310,12 +317,12 @@ export default {
               message: "发起终止osc请求失败"
             });
           });
-      if (res.msg != "success") return this.$message.error("终止osc失败");
+      if (res.msg !== "success") return this.$message.error("终止osc失败");
     },
     async alert_sql(sql) {
       sql = sqlFormatter.format(sql);
       sql = hljs.highlight("sql", sql).value;
-      this.$alert('<pre>' + sql + '</pre>', 'sql', {
+      await this.$alert('<pre>' + sql + '</pre>', 'sql', {
         dangerouslyUseHTMLString: true,
       });
     },
@@ -328,7 +335,7 @@ export default {
               message: "发起请求工单失败"
             });
           });
-      if (res.msg != "success") return this.$message.error("获取工单失败");
+      if (res.msg !== "success") return this.$message.error("获取工单失败");
       this.data_export_tableData = res.data;
       this.total = res.total;
     },
@@ -350,7 +357,36 @@ export default {
         // console.log(row[i])
         await this.commitOrder(row[i])
       }
-    }
+    },
+    rejectOrder_all(row) {
+      this.$prompt("请输入驳回理由", "提示", {
+        confirmButtonText: "确定",
+        cancelButtonText: "取消",
+        inputPattern: /[^\s]+/,
+        inputErrorMessage: "请输入内容"
+      })
+          .then(async ({value}) => {
+            for (const i in row) {
+              const {data: res} = await this.$ajax
+                  .post(`/sqlrecord/${row[i].id}/?remark=${value}`)
+                  .catch(() => {
+                    return this.$notify.error({
+                      title: "错误",
+                      message: "发起驳回操作失败"
+                    });
+                  });
+              if (res.msg !== "success") return this.$message.error("驳回操作失败");
+            }
+            this.$message.success("已驳回该工单");
+            await this.get_workorder();
+          })
+          .catch(() => {
+            this.$message({
+              type: "info",
+              message: "取消输入"
+            });
+          });
+    },
   }
 };
 </script>
