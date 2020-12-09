@@ -9,6 +9,8 @@
       <el-table :data="tableData" style="width: 100%" border stripe>
         <el-table-column label="#" type="index" align="center" header-align="center"></el-table-column>
         <el-table-column label="发起人" prop="sponsor" align="center" header-align="center"></el-table-column>
+        <el-table-column label="审核人" prop="approver_manager" align="center" header-align="center"></el-table-column>
+        <el-table-column label="审核dba" prop="approver_dba" align="center" header-align="center"></el-table-column>
         <el-table-column label="实例名称" prop="ins_name" align="center" header-align="center"></el-table-column>
         <el-table-column label="实例地址" prop="host" align="center" header-align="center"></el-table-column>
         <el-table-column label="数据库" prop="dbname" align="center" header-align="center"></el-table-column>

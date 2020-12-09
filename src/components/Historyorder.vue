@@ -17,6 +17,13 @@
                   <el-button type="primary" @click="alert_sql(scope.row.sql);" size="mini" round>查看全部sql</el-button>
                 </template>
               </el-table-column>
+              <el-table-column
+                  label="审批人"
+                  prop="approved"
+                  align="center"
+                  header-align="center"
+                  width="150px"
+              ></el-table-column>
               <el-table-column label="审批进度" header-align="center" width="400px">
                 <template slot-scope="scope">
                   <el-steps
@@ -67,6 +74,8 @@
         </el-table-column>
         <el-table-column label="#" type="index" align="center" header-align="center"></el-table-column>
         <el-table-column label="发起人" prop="sponsor" align="center" header-align="center"></el-table-column>
+        <el-table-column label="审核人" prop="approver_manager" align="center" header-align="center"></el-table-column>
+        <el-table-column label="审核dba" prop="approver_dba" align="center" header-align="center"></el-table-column>
         <el-table-column label="实例名称" prop="ins_name" align="center" header-align="center"></el-table-column>
         <el-table-column label="实例地址" prop="host" align="center" header-align="center"></el-table-column>
         <el-table-column label="数据库" prop="dbname" align="center" header-align="center"></el-table-column>
