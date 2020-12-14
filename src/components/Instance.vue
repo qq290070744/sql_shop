@@ -29,7 +29,7 @@
         <el-table-column prop="port" label="端口" align="center" header-align="center"></el-table-column>
         <el-table-column prop="type" label="主从类型" align="center" header-align="center">
           <template slot-scope="scope">
-            <el-tag v-if="scope.row.type=='master'" type="success">master</el-tag>
+            <el-tag v-if="scope.row.type==='master'" type="success">master</el-tag>
             <el-tag v-else type="info">slave</el-tag>
           </template>
         </el-table-column>
@@ -58,6 +58,12 @@
                 size="mini"
                 @click="handlerClearBinlog(scope.row)"
             >binlog清理
+            </el-button>
+            <el-button
+                type="primary"
+                size="mini"
+                @click="dialogTableVisible_instance_monitor = true;rowid=scope.row.id;"
+            >实例监控
             </el-button>
           </template>
         </el-table-column>
@@ -222,6 +228,72 @@
         </el-form-item>
       </el-form>
     </el-dialog>
+
+    <el-dialog style="width: 100%;" title="实例监控" :visible.sync="dialogTableVisible_instance_monitor">
+      <el-table :data="instance_monitor_data">
+        <el-table-column property="time" label="时间"></el-table-column>
+        <el-table-column label=" -QPS- -TPS- ">
+          <el-table-column property="ins" label="ins"></el-table-column>
+          <el-table-column property="upd" label="upd"></el-table-column>
+          <el-table-column property="del" label="del"></el-table-column>
+          <el-table-column property="sel" label="sel"></el-table-column>
+          <el-table-column property="iud" label="iud"></el-table-column>
+        </el-table-column>
+
+        <el-table-column label=" -Hit%- ">
+          <el-table-column property="lor" label="lor"></el-table-column>
+          <el-table-column property="hit" label="hit"></el-table-column>
+        </el-table-column>
+
+        <el-table-column label=" -innodb rows status- ">
+          <el-table-column property="innodb_rows_inserted_diff" label="ins"></el-table-column>
+          <el-table-column property="innodb_rows_updated_diff" label="upd"></el-table-column>
+          <el-table-column property="innodb_rows_deleted_diff" label="del"></el-table-column>
+          <el-table-column property="innodb_rows_read_diff" label="read"></el-table-column>
+        </el-table-column>
+
+        <el-table-column label="-innodb bp pages status-">
+          <el-table-column property="data" label="data"></el-table-column>
+          <el-table-column property="free" label="free"></el-table-column>
+          <el-table-column property="dirty" label="dirty"></el-table-column>
+          <el-table-column property="flush" label="flush"></el-table-column>
+        </el-table-column>
+
+        <el-table-column label="-innodb data status-">
+          <el-table-column property="reads" label="reads"></el-table-column>
+          <el-table-column property="writes" label="writes"></el-table-column>
+          <el-table-column property="readed" label="readed"></el-table-column>
+          <el-table-column property="written" label="written"></el-table-column>
+        </el-table-column>
+
+        <el-table-column label="--innodb log--">
+          <el-table-column property="innodb_os_log_fsyncs_diff" label="fsyncs"></el-table-column>
+          <el-table-column property="innodb_os_log_written_diff" label="written"></el-table-column>
+        </el-table-column>
+
+        <el-table-column label="his --log(byte)--  read --query--">
+          <el-table-column property="list" label="list"></el-table-column>
+          <el-table-column property="uflush" label="uflush"></el-table-column>
+          <el-table-column property="uckpt" label="uckpt"></el-table-column>
+          <el-table-column property="view" label="view"></el-table-column>
+          <el-table-column property="inside" label="inside"></el-table-column>
+          <el-table-column property="que" label="que"></el-table-column>
+        </el-table-column>
+
+        <el-table-column label="--threads--">
+          <el-table-column property="run" label="run"></el-table-column>
+          <el-table-column property="con" label="con"></el-table-column>
+          <el-table-column property="cre" label="cre"></el-table-column>
+          <el-table-column property="cac" label="cac"></el-table-column>
+        </el-table-column>
+
+        <el-table-column label="--bytes--">
+          <el-table-column property="recv" label="recv"></el-table-column>
+          <el-table-column property="send" label="send"></el-table-column>
+        </el-table-column>
+
+      </el-table>
+    </el-dialog>
   </div>
 </template>
 
@@ -242,6 +314,8 @@ export default {
       return callback();
     };
     return {
+      dialogTableVisible_instance_monitor: false,
+      instance_monitor_data: [],
       autofocus: true,
       dialogTitle: "添加实例",
       dialogTitleBinlog: "清理Binlog日志",
@@ -281,11 +355,19 @@ export default {
         ins_name: "",
         page: 1,
         limit: 5
-      }
+      },
+      timer: '',
+      rowid: '',
     };
   },
-  created() {
-    this.getinstance();
+  async created() {
+    await this.getinstance();
+  },
+  async mounted() {
+    this.timer = setInterval(await this.instance_monitor, 5000);
+  },
+  beforeDestroy() {
+    clearInterval(this.timer);
   },
   methods: {
     async handlerClearBinlog(row) {
@@ -314,8 +396,8 @@ export default {
             const {data: res} = await this.$ajax.delete(
                 `/instance/?id=${row.id}`
             );
-            if (res.msg != "success") return this.message.error("删除失败");
-            this.getinstance();
+            if (res.msg !== "success") return this.message.error("删除失败");
+            await this.getinstance();
             // console.log(res)
             this.$message({
               type: "success",
@@ -349,12 +431,12 @@ export default {
             return this.$notify.error({title: '错误', message: '发起创建实例失败'})
           });
         }
-        if (res.msg != "success") {
+        if (res.msg !== "success") {
           return this.$message.error(res.msg);
         }
         this.dialogVisible = false;
         this.resetForm();
-        this.getinstance();
+        await this.getinstance();
         return this.autofocus
             ? this.$message.success("添加实例成功")
             : this.$message.success("修改实例成功");
@@ -375,7 +457,7 @@ export default {
             "/concheck/",
             this.formData
         );
-        if (res.msg != "success") {
+        if (res.msg !== "success") {
           loading.close();
           return this.$message.error(res.msg);
         }
@@ -419,15 +501,15 @@ export default {
         params: this.queryInfo
       });
       // console.log(res)
-      if (tab.msg != "success") return this.$message.error("查询实例失败");
-      tab.data.forEach(async item => {
+      if (tab.msg !== "success") return this.$message.error("查询实例失败");
+      for (const item of tab.data) {
         const {data: res} = await this.$ajax.post(
             `/concheck2/?id=${item.id}`
         );
         res.msg === "success"
             ? this.$set(item, "status", "1")
             : this.$set(item, "status", "0");
-      });
+      }
       this.tableData = tab.data;
       this.total = tab.total;
     },
@@ -438,28 +520,41 @@ export default {
       const {data: tab} = await this.$ajax.get("/instance/", {
         params: this.queryInfo
       });
-      if (tab.msg != "success") return this.$message.error("实例列表获取失败");
-      tab.data.forEach(async item => {
+      if (tab.msg !== "success") return this.$message.error("实例列表获取失败");
+      for (const item of tab.data) {
         const {data: res} = await this.$ajax.post(
             `/concheck2/?id=${item.id}`
         );
         res.msg === "success"
             ? this.$set(item, "status", "1")
             : this.$set(item, "status", "0");
-      });
+      }
       this.tableData = tab.data;
       this.total = tab.total;
     },
     async del_binlog() {
       if (!this.formData.binlog) return this.$message.error("请选择要清理的binlog");
       const {data: tab} = await this.$ajax.post("/del_binlog/", {'binlog': this.formData.binlog, id: this.formData.id});
-      if (tab.msg != "success") return this.$message.error("清理失败");
+      if (tab.msg !== "success") return this.$message.error("清理失败");
       this.$message({
         message: '清理成功',
         type: 'success'
       });
       this.dialogVisibleBinlog = false
     },
+    async instance_monitor() {
+      if (this.dialogTableVisible_instance_monitor) {
+        const {data: tab} = await this.$ajax.get(`/instance_monitor/?id=${this.rowid}`,);
+        if (tab.msg !== "success") return this.$message.error("请求失败");
+        this.instance_monitor_data.push(tab.data)
+        this.instance_monitor_data.reverse()
+        this.instance_monitor_data = this.instance_monitor_data.slice(0, 5)
+      } else {
+        this.instance_monitor_data = []
+      }
+      // this.dialogTableVisible_instance_monitor = false
+    },
+
   }
 };
 </script>
@@ -480,5 +575,9 @@ export default {
 
 .el-row {
   margin-top: 20px;
+}
+
+.el-dialog {
+  width: 1000px !important;
 }
 </style>
