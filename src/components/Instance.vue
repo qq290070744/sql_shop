@@ -229,7 +229,7 @@
       </el-form>
     </el-dialog>
 
-    <el-dialog style="width: 100%;" title="实例监控" :visible.sync="dialogTableVisible_instance_monitor">
+    <el-dialog title="实例监控" :visible.sync="dialogTableVisible_instance_monitor">
       <el-table :data="instance_monitor_data">
         <el-table-column property="time" label="时间"></el-table-column>
         <el-table-column label=" -QPS- -TPS- ">
@@ -546,8 +546,7 @@ export default {
       if (this.dialogTableVisible_instance_monitor) {
         const {data: tab} = await this.$ajax.get(`/instance_monitor/?id=${this.rowid}`,);
         if (tab.msg !== "success") return this.$message.error("请求失败");
-        this.instance_monitor_data.push(tab.data)
-        this.instance_monitor_data.reverse()
+        this.instance_monitor_data.unshift(tab.data)
         this.instance_monitor_data = this.instance_monitor_data.slice(0, 5)
       } else {
         this.instance_monitor_data = []
@@ -578,6 +577,7 @@ export default {
 }
 
 .el-dialog {
-  width: 1000px !important;
+  width: auto !important;
+  height: auto !important;
 }
 </style>
