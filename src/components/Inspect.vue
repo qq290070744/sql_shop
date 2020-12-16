@@ -107,7 +107,7 @@
     <el-dialog title="SQL审核结果" width="60%" :visible="dialogVisible" @close="dialogClose">
       <div v-for="(item,index) in result" :key="index">
         <el-divider>SQL {{ index + 1 }}</el-divider>
-        <el-tag v-for="(i,idx) in item.split('.')" :key="idx" v-if="i!=''">{{ i }}</el-tag>
+        <el-tag v-for="(i,idx) in item.split('\n')" :key="idx" v-if="i!==''">{{ i }}</el-tag>
       </div>
       <el-divider>END</el-divider>
       <el-row>
