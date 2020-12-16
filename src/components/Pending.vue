@@ -32,6 +32,8 @@
                   <el-button type="primary" @click="alert_sql(scope.row.sql);" size="mini" round>查看全部sql</el-button>
                 </template>
               </el-table-column>
+              <el-table-column label="预计影响行数" prop="affected_rows" header-align="center"></el-table-column>
+              <el-table-column label="预计执行时间/s" prop="execute_time" header-align="center"></el-table-column>
               <el-table-column label="审批进度" header-align="center" width="400px">
                 <template slot-scope="scope">
                   <el-steps
