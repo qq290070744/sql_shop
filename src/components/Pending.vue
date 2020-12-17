@@ -46,11 +46,11 @@
                     <el-step title="提交工单"></el-step>
                     <el-step
                         title="审批"
-                        :description="scope.row.remark && scope.row.status_code==1?scope.row.remark:''"
+                        :description="scope.row.remark && scope.row.status_code===1?scope.row.remark:''"
                     ></el-step>
                     <el-step
                         title="执行"
-                        :description="scope.row.remark && scope.row.status_code==2?scope.row.remark:''"
+                        :description="scope.row.remark && scope.row.status_code===2?scope.row.remark:''"
                     ></el-step>
                   </el-steps>
                 </template>

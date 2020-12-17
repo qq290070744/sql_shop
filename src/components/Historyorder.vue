@@ -116,8 +116,6 @@ export default {
       this.offset = val;
       this.get_workorder();
     },
-    rollbackOrder(row) {
-    },
     async get_workorder() {
       const {data: res} = await this.$ajax
           .get(`/historyorder/?offset=${this.offset}&limit=${this.limit}`)
@@ -127,7 +125,7 @@ export default {
               message: "发起请求历史工单失败"
             });
           });
-      if (res.msg != "success") return this.$message.error("获取历史工单失败");
+      if (res.msg !== "success") return this.$message.error("获取历史工单失败");
       this.tableData = res.data;
       this.total = res.total;
       // this.tableData.forEach(item => {
@@ -138,7 +136,7 @@ export default {
     },
     rollbackOrder(row) {
       if (
-          (row.remark != "" && row.status_code != 3) ||
+          (row.remark !== "" && row.status_code !== 3) ||
           row.remark === "rollbacked"
       )
         return this.$notify.error({
@@ -159,12 +157,12 @@ export default {
                     message: "发起回滚操作失败"
                   });
                 });
-            if (res.msg != "success") return this.$message.error(res.msg);
+            if (res.msg !== "success") return this.$message.error(res.msg);
             this.$message({
               type: "success",
               message: "回滚成功!"
             });
-            this.get_workorder();
+            await this.get_workorder();
           })
           .catch(() => {
             this.$message({
@@ -176,12 +174,12 @@ export default {
     async alert_sql(sql) {
       sql = sqlFormatter.format(sql);
       sql = hljs.highlight("sql", sql).value;
-      this.$alert('<pre>' + sql + '</pre>', 'sql', {
+      await this.$alert('<pre>' + sql + '</pre>', 'sql', {
         dangerouslyUseHTMLString: true,
       });
     },
     async alert_remark(remark) {
-      this.$alert('<pre>' + remark + '</pre>', 'remark', {
+      await this.$alert('<pre>' + remark + '</pre>', 'remark', {
         dangerouslyUseHTMLString: true,
       });
     },

@@ -38,7 +38,7 @@
                     <el-step title="提交工单"></el-step>
                     <el-step
                         title="审批"
-                        :description="scope.row.remark && scope.row.status_code==1?scope.row.remark:''"
+                        :description="scope.row.remark && scope.row.status_code===1?scope.row.remark:''"
                     ></el-step>
                     <el-step
                         v-if="scope.row.remark==='rollbacked'"
@@ -49,7 +49,7 @@
                     <el-step
                         v-else
                         title="执行"
-                        :description="scope.row.remark && scope.row.status_code==2?scope.row.remark.slice(0,100):''"
+                        :description="scope.row.remark && scope.row.status_code===2?scope.row.remark.slice(0,100):''"
                     ></el-step>
                   </el-steps>
                 </template>
@@ -120,7 +120,7 @@ export default {
               message: "发起请求工单失败"
             });
           });
-      if (res.msg != "success") return this.$message.error("获取工单失败");
+      if (res.msg !== "success") return this.$message.error("获取工单失败");
       this.tableData = res.data;
       this.total = res.total;
       // this.tableData.forEach(item => {
@@ -132,12 +132,12 @@ export default {
     async alert_sql(sql) {
       sql = sqlFormatter.format(sql);
       sql = hljs.highlight("sql", sql).value;
-      this.$alert('<pre>' + sql + '</pre>', 'sql', {
+      await this.$alert('<pre>' + sql + '</pre>', 'sql', {
         dangerouslyUseHTMLString: true,
       });
     },
     async alert_remark(remark) {
-      this.$alert('<pre>' + remark + '</pre>', 'remark', {
+      await this.$alert('<pre>' + remark + '</pre>', 'remark', {
         dangerouslyUseHTMLString: true,
       });
     },
