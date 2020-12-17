@@ -17,7 +17,7 @@
                   <el-button type="primary" @click="alert_sql(scope.row.sql);" size="mini" round>查看全部sql</el-button>
                 </template>
               </el-table-column>
-              <el-table-column label="审批人" prop="approved"></el-table-column>
+              <el-table-column label="实际审批人" prop="approved"></el-table-column>
               <el-table-column label="影响行数" prop="affected_rows" header-align="center"></el-table-column>
               <el-table-column label="执行时间/s" prop="execute_time" header-align="center"></el-table-column>
               <el-table-column label="审批进度" header-align="center" width="400px">
@@ -32,7 +32,7 @@
                     <el-step title="提交工单"></el-step>
                     <el-step
                         title="审批"
-                        :description="scope.row.remark && scope.row.status_code==1?scope.row.remark:''"
+                        :description="scope.row.remark && scope.row.status_code===1?scope.row.remark:''"
                     ></el-step>
                     <el-step
                         v-if="scope.row.remark==='rollbacked'"
@@ -43,7 +43,7 @@
                     <el-step
                         v-else
                         title="执行"
-                        :description="scope.row.remark && scope.row.status_code==2?scope.row.remark.slice(0,100):''"
+                        :description="scope.row.remark && scope.row.status_code===2?scope.row.remark.slice(0,100):''"
                     ></el-step>
                   </el-steps>
                 </template>

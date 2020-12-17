@@ -18,7 +18,7 @@
                 </template>
               </el-table-column>
               <el-table-column
-                  label="审批人"
+                  label="实际审批人"
                   prop="approved"
                   align="center"
                   header-align="center"
