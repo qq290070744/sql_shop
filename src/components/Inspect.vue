@@ -68,7 +68,7 @@
         <el-row>
           <el-col :span="16">
             <el-form-item label="工单说明: " prop="remark" label-width="150px">
-              <textarea v-model="queryInfo.remark" rows="3"  style="width: 75%;"></textarea>
+              <textarea v-model="queryInfo.remark" rows="3" style="width: 75%;"></textarea>
             </el-form-item>
           </el-col>
         </el-row>
@@ -79,6 +79,14 @@
             </el-form-item>
           </el-col>
           <el-col :span="7">
+            <el-select
+                v-model="activeName"
+                filterable
+                placeholder="请选择表"
+                @change="getDesc"
+            >
+              <el-option v-for="item in tabs" :key="item" :value="item" :label="item"></el-option>
+            </el-select>
             <ul style="overflow: auto">
               <el-collapse
                   v-model="activeName"

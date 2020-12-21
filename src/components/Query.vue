@@ -67,6 +67,14 @@
             </el-form-item>
           </el-col>
           <el-col :span="7">
+            <el-select
+                v-model="activeName"
+                filterable
+                placeholder="请选择表"
+                @change="getDesc"
+            >
+              <el-option v-for="item in tabs" :key="item" :value="item" :label="item"></el-option>
+            </el-select>
             <ul style="overflow: auto">
               <el-collapse
                   v-model="activeName"
@@ -251,7 +259,8 @@ export default {
       isRet: false,
       isFetching: true,
       manager: [],
-      dba: []
+      dba: [],
+      search_tablename: ""
     };
   },
   mounted() {
@@ -264,7 +273,7 @@ export default {
       const {data: res} = await this.$ajax.get("/get_approver/").catch(() => {
         return this.$notify.error({title: "错误", message: "请求审批人失败"});
       });
-      if (res.msg != "success") return this.$message.error("获取审批人失败");
+      if (res.msg !== "success") return this.$message.error("获取审批人失败");
       this.manager = res.data.manager;
       this.dba = res.data.dba;
     },
@@ -287,13 +296,13 @@ export default {
           .catch(() => {
             this.$notify.error({title: "错误", message: "获取结果失败"});
           });
-      if (res.msg != "success") {
+      if (res.msg !== "success") {
         this.isRet = false;
         return this.$message.error(res.msg);
       }
       this.tableData = res.data;
       this.total = res.total;
-      if (res.total != 0) {
+      if (res.total !== 0) {
         this.tableLabel = Object.keys(res.data[0]);
       }
       this.isFetching = false;
@@ -351,22 +360,22 @@ export default {
                   message: "提交失败"
                 });
               });
-          if (res.msg != "success") return this.$message.error("SQL审核失败");
+          if (res.msg !== "success") return this.$message.error("SQL审核失败");
           this.result = res.data.join("");
           this.loading = false;
         } else {
-          this.getRes(form);
+          await this.getRes(form);
         }
       });
     },
     async getDesc() {
-      if (this.activeName != "") {
+      if (this.activeName !== "") {
         const {data: res} = await this.$ajax.get(
             `/get_desc/?id=${this.queryInfo.selectHost}&dbname=${this.queryInfo.selectDb}&table=${this.activeName}`
         );
         this.desc = res.data[1];
         this.desc = hljs.highlight("sql", this.desc).value;
-        this.$alert('<pre>' + this.desc + '</pre>', this.activeName, {
+        await this.$alert('<pre>' + this.desc + '</pre>', this.activeName, {
           dangerouslyUseHTMLString: true,
         });
       }
@@ -375,7 +384,7 @@ export default {
       const {data: res} = await this.$ajax.get(
           `/get_table/?id=${this.queryInfo.selectHost}&dbname=${this.queryInfo.selectDb}`
       );
-      if (res.msg != "success")
+      if (res.msg !== "success")
         return this.$message.error("库中数据表获取失败");
       this.tabs = Object.keys(res.data.tables);
       this.editor.setOption("hintOptions", res.data);
@@ -392,11 +401,11 @@ export default {
       const {data: res} = await this.$ajax.get("/get_ins/").catch(() => {
         return this.$notify.error({title: "错误", message: "获取实例失败"});
       });
-      if (res.msg != "success") return this.$message.error("获取实例失败");
+      if (res.msg !== "success") return this.$message.error("获取实例失败");
       this.options = res.data;
     },
     async get_db(form) {
-      if (this.queryInfo.selectDb != "") this.queryInfo.selectDb = "";
+      if (this.queryInfo.selectDb !== "") this.queryInfo.selectDb = "";
       this.dbs = [];
       this.tabs = [];
       const {data: res} = await this.$ajax
@@ -407,7 +416,7 @@ export default {
               message: "获取数据库失败，请检查实例连接配置"
             });
           });
-      if (res.msg != "success")
+      if (res.msg !== "success")
         return this.$message.error("获取数据库失败，请检查实例连接状态");
       this.dbs = res.data;
     },
@@ -435,7 +444,7 @@ export default {
     },
     sqlFormat() {
       this.editor.setValue(sqlFormatter.format(this.editor.getValue()));
-    }
+    },
   }
 };
 </script>
