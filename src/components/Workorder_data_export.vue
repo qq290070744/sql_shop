@@ -30,14 +30,22 @@
             <el-tag v-if="scope.row.status==2? true: false" type="danger">
               <span class="el-icon-error">驳回</span>
             </el-tag>
+            <el-tag v-if="scope.row.status==3? true: false" type="success">
+              <span class="el-icon-success">已下载</span>
+            </el-tag>
           </template>
         </el-table-column>
         <el-table-column label="链接" align="center" header-align="center">
           <template slot-scope="scope">
-            <el-link type="primary" v-if="scope.row.status==1? true: false" v-bind:href="scope.row.path" target="_blank">下载链接</el-link>
+            <el-link type="primary" v-if="scope.row.status===1" v-bind:href="scope.row.path" target="_blank">下载链接</el-link>
           </template>
         </el-table-column>
         <el-table-column label="发起时间" prop="create_time" align="center" header-align="center"></el-table-column>
+        <el-table-column label="下载时间" align="center" header-align="center">
+          <template slot-scope="scope">
+            <span type="primary" v-if="scope.row.status===3">{{ scope.row.end_time }}</span>
+          </template>
+        </el-table-column>
         <el-table-column label="工单说明" prop="remark" align="center" header-align="center"></el-table-column>
       </el-table>
       <el-pagination

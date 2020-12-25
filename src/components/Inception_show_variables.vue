@@ -48,7 +48,7 @@ export default {
               message: "发起请求失败"
             });
           });
-      if (res.msg != "success") return this.$message.error("获取失败");
+      if (res.msg !== "success") return this.$message.error("获取失败");
       this.tableData = res.data;
     },
     async inception_set(Variable_name, Value) {
@@ -60,7 +60,7 @@ export default {
               message: "发起请求失败"
             });
           });
-      if (res.msg != "success") return this.$message.error("设置失败");
+      if (res.msg !== "success") return this.$message.error("设置失败");
       this.$message({
         message: '修改成功',
         type: 'success'

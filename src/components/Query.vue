@@ -92,6 +92,7 @@
         <el-row :gutter="60">
           <el-col :span="12" style="margin-left: 50px">
             <el-button @click="sqlFormat" type="danger">格式化sql</el-button>
+<!--            <el-button @click="outerVisible = true" type="info">sql记事本</el-button>-->
           </el-col>
           <el-col :span="6">
             <el-button type="info" @click="resetForm('queryRef')">重置</el-button>
@@ -186,6 +187,20 @@
       </div>
     </el-dialog>
 
+    <el-dialog title="sql记事本" :visible.sync="outerVisible">
+
+      <el-dialog
+          width="30%"
+          title="添加sql"
+          :visible.sync="innerVisible"
+          append-to-body>
+
+      </el-dialog>
+      <div slot="footer" class="dialog-footer">
+        <el-button @click="outerVisible = false">取 消</el-button>
+        <el-button type="primary" @click="innerVisible = true">添加sql</el-button>
+      </div>
+    </el-dialog>
   </div>
 </template>
 
@@ -260,7 +275,9 @@ export default {
       isFetching: true,
       manager: [],
       dba: [],
-      search_tablename: ""
+      search_tablename: "",
+      outerVisible: false,
+      innerVisible: false,
     };
   },
   mounted() {
