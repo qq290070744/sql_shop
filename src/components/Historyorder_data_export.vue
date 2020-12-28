@@ -42,9 +42,14 @@
           </template>
         </el-table-column>
         <el-table-column label="发起时间" prop="create_time" align="center" header-align="center"></el-table-column>
+        <el-table-column label="审批时间" align="center" header-align="center">
+          <template slot-scope="scope">
+            <span type="primary" v-if="scope.row.status>=1">{{ scope.row.approve_time }}</span>
+          </template>
+        </el-table-column>
         <el-table-column label="下载时间" align="center" header-align="center">
           <template slot-scope="scope">
-            <span type="primary" v-if="scope.row.status===3">{{ scope.row.end_time }}</span>
+            <span type="primary" v-if="scope.row.status===3">{{ scope.row.download_time }}</span>
           </template>
         </el-table-column>
         <el-table-column label="工单说明" prop="remark" align="center" header-align="center"></el-table-column>
