@@ -104,6 +104,7 @@
         <el-row :gutter="60">
           <el-col :span="12" style="margin-left: 50px">
             <el-button @click="sqlFormat" type="danger">格式化sql</el-button>
+            <el-button @click="alter_merge" type="primary">alter合并</el-button>
           </el-col>
           <el-col :span="6">
             <el-button type="info" @click="resetForm('queryRef')">重置</el-button>
@@ -192,7 +193,7 @@ export default {
       const {data: res} = await this.$ajax.get("/get_approver/").catch(() => {
         return this.$notify.error({title: "错误", message: "请求审批人失败"});
       });
-      if (res.msg != "success") return this.$message.error("获取审批人失败");
+      if (res.msg !== "success") return this.$message.error("获取审批人失败");
       this.manager = res.data.manager;
       this.dba = res.data.dba;
     },
@@ -213,7 +214,7 @@ export default {
                 message: "SQL发起审核失败"
               });
             });
-        if (res.msg != "success") return this.$message.error("SQL审核失败");
+        if (res.msg !== "success") return this.$message.error("SQL审核失败");
         if (res.data) {
           this.result = res.data;
           this.dialogVisible = true;
@@ -224,13 +225,13 @@ export default {
       });
     },
     async getDesc() {
-      if (this.activeName != "") {
+      if (this.activeName !== "") {
         const {data: res} = await this.$ajax.get(
             `/get_desc/?id=${this.queryInfo.selectHost}&dbname=${this.queryInfo.selectDb}&table=${this.activeName}`
         );
         this.desc = res.data[1];
         this.desc = hljs.highlight("sql", this.desc).value;
-        this.$alert('<pre>' + this.desc + '</pre>', this.activeName, {
+        await this.$alert('<pre>' + this.desc + '</pre>', this.activeName, {
           dangerouslyUseHTMLString: true,
         });
       }
@@ -239,7 +240,7 @@ export default {
       const {data: res} = await this.$ajax.get(
           `/get_table/?id=${this.queryInfo.selectHost}&dbname=${this.queryInfo.selectDb}`
       );
-      if (res.msg != "success")
+      if (res.msg !== "success")
         return this.$message.error("库中数据表获取失败");
       this.tabs = Object.keys(res.data.tables);
       this.editor.setOption("hintOptions", res.data);
@@ -256,11 +257,11 @@ export default {
           .catch(() => {
             return this.$notify.error({title: "错误", message: "获取实例失败"});
           });
-      if (res.msg != "success") return this.$message.error("获取实例失败");
+      if (res.msg !== "success") return this.$message.error("获取实例失败");
       this.options = res.data;
     },
     async get_db(form) {
-      if (this.queryInfo.selectDb != "") this.queryInfo.selectDb = "";
+      if (this.queryInfo.selectDb !== "") this.queryInfo.selectDb = "";
       this.dbs = [];
       this.tabs = [];
       const {data: res} = await this.$ajax
@@ -271,7 +272,7 @@ export default {
               message: "获取数据库失败，请检查实例连接配置"
             });
           });
-      if (res.msg != "success")
+      if (res.msg !== "success")
         return this.$message.error("获取数据库失败，请检查实例连接状态");
       this.dbs = res.data;
     },
@@ -299,6 +300,19 @@ export default {
     },
     sqlFormat() {
       this.editor.setValue(sqlFormatter.format(this.editor.getValue()));
+    },
+    async alter_merge() {
+      this.queryInfo.sql = this.editor.getValue();
+      const {data: res} = await this.$ajax
+          .post("/alter_merge/", {"sql": this.queryInfo.sql})
+          .catch(() => {
+            return this.$notify.error({
+              title: "请求失败",
+              message: "alter合并失败"
+            });
+          });
+      if (res.msg !== "success") return this.$message.error("alter合并失败");
+      this.editor.setValue(res.data.sql);
     }
   }
 };
