@@ -18,6 +18,11 @@ import Historyorder_data_export from "@/components/Historyorder_data_export";
 import Desensitization_info from "@/components/Desensitization_info";
 import Slowlog_list from "@/components/Slowlog_list";
 import Query_log from "@/components/Query_log";
+import Process from "@/components/Process";
+import Tablesapce from "@/components/Tablesapce";
+import Innodb_trx from "@/components/Innodb_trx";
+import Trxandlocks from "@/components/Trxandlocks";
+import Instanceaccount from "@/components/Instanceaccount";
 
 Vue.use(VueRouter)
 
@@ -116,6 +121,31 @@ const routes = [
                 path: '/get_query_log',
                 name: '历史查询记录',
                 component: Query_log
+            },
+            {
+                path: '/processlist',
+                name: '会话管理',
+                component: Process
+            },
+            {
+                path: '/tablesapce',
+                name: 'Top表空间',
+                component: Tablesapce
+            },
+            {
+                path: '/innodb_trx',
+                name: '事务信息',
+                component: Innodb_trx
+            },
+            {
+                path: '/trxandlocks',
+                name: '锁信息',
+                component: Trxandlocks
+            },
+            {
+                path: '/instanceaccount',
+                name: '数据库账号管理',
+                component: Instanceaccount
             },
         ]
     }
