@@ -158,6 +158,7 @@
           <el-form-item label="选择数据库：" v-if="grant_form.priv_type===1">
             <el-select
                 multiple
+                filterable
                 v-model="grant_form.db_name"
                 placeholder="选择数据库："
             >
@@ -166,6 +167,7 @@
           </el-form-item>
           <el-form-item label="选择数据库：" v-if="grant_form.priv_type===2">
             <el-select
+                filterable
                 v-model="grant_form.db_name[0]"
                 placeholder="选择数据库："
                 @change="getTable"
@@ -176,6 +178,7 @@
           <el-form-item label="选择表：" v-if="grant_form.priv_type===2">
             <el-select
                 multiple
+                filterable
                 v-model="grant_form.tb_name"
                 placeholder="选择表："
             >
