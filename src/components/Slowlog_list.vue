@@ -91,6 +91,11 @@
             element-loading-background="rgba(0, 0, 0, 0.8)"
         >
           <markdown-it-vue :content="result"/>
+          <el-row v-if="!loading">
+            <el-col :push="18">
+              <el-button type="info" @click="closeDialog">关闭</el-button>
+            </el-col>
+          </el-row>
         </div>
       </el-dialog>
     </el-card>
@@ -99,8 +104,12 @@
 <script>
 import hljs from "highlight.js";
 import sqlFormatter from "sql-formatter";
+import MarkdownItVue from "markdown-it-vue";
 
 export default {
+  components: {
+    MarkdownItVue
+  },
   data() {
     return {
       tableData: [],
@@ -228,6 +237,11 @@ export default {
       this.result = res.data.join("");
       this.loading = false;
 
+    },
+    async closeDialog() {
+      this.dialogVisible = false;
+      this.result = "";
+      this.loading = true;
     },
   }
 };
