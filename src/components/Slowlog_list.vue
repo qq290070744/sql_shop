@@ -56,6 +56,7 @@
           <template slot-scope="scope">
             <pre><div v-html="scope.row.orig_sql.slice(0,100)"></div></pre>
             <el-button type="primary" @click="alert_sql(scope.row.orig_sql);" size="mini" round>查看全部sql</el-button>
+            <el-button type="success" @click="sqlscore(scope.row);" size="mini" round>获取优化建议</el-button>
           </template>
         </el-table-column>
         <!--        <el-table-column label="时间" prop="create_time" align="center" header-align="center"></el-table-column>-->
@@ -80,6 +81,18 @@
           layout="total, sizes, prev, pager, next, jumper"
           :total="total"
       ></el-pagination>
+
+      <el-dialog title="SQL审核结果" :visible="dialogVisible" width="75%" @close="closeDialog">
+        <div
+            style="min-height: 500px"
+            v-loading="loading"
+            element-loading-text="拼命加载中"
+            element-loading-spinner="el-icon-loading"
+            element-loading-background="rgba(0, 0, 0, 0.8)"
+        >
+          <markdown-it-vue :content="result"/>
+        </div>
+      </el-dialog>
     </el-card>
   </div>
 </template>
@@ -126,6 +139,16 @@ export default {
       datetimevalue: [],
       tableLabel: [],
       search_value: 'get_slowlog',
+      queryInfo: {
+        selectHost: "",
+        selectDb: "",
+        sql: "",
+        "offset": 0,
+        "limit": 0,
+        "limit2": 0
+      },
+      result: "",
+      loading: true,
     };
   },
   mounted() {
@@ -187,6 +210,24 @@ export default {
       });
       if (res.msg !== "success") return this.$message.error("获取实例失败");
       this.options = res.data;
+    },
+    async sqlscore(row) {
+      this.queryInfo.sql = row.orig_sql
+      this.queryInfo.selectHost = row.dbid
+      this.queryInfo.selectDb = row.db_user
+      this.dialogVisible = true;
+      const {data: res} = await this.$ajax
+          .post("/sqlscore/", this.queryInfo)
+          .catch(() => {
+            this.$notify.error({
+              title: "错误",
+              message: "提交失败"
+            });
+          });
+      if (res.msg !== "success") return this.$message.error("SQL审核失败");
+      this.result = res.data.join("");
+      this.loading = false;
+
     },
   }
 };
