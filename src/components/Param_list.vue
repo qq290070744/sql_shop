@@ -21,7 +21,10 @@
             ></el-option>
           </el-select>
         </el-form-item>
-        <el-button type="primary" @click="show_variables">刷新</el-button>
+        <el-form-item>
+          <el-input v-model="value" placeholder="value"></el-input>
+        </el-form-item>
+        <el-button type="primary" @click="show_variables">搜索</el-button>
       </el-form>
 
       <el-table :data="tbs" style="width: 100%" border stripe>
@@ -65,6 +68,7 @@ export default {
       options: [],
       selectHost: '',
       tbs: [],
+      value: '',
     };
   },
   mounted() {
@@ -82,7 +86,7 @@ export default {
     },
     async show_variables() {
       const {data: res} = await this.$ajax
-          .post("/show_variables/", {"id": this.selectHost,})
+          .post("/show_variables/", {"instance_id": this.selectHost, "value": this.value})
           .catch(() => {
             return this.$notify.error({title: "错误", message: "请求失败"});
           });
