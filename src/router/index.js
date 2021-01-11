@@ -23,6 +23,7 @@ import Tablesapce from "@/components/Tablesapce";
 import Innodb_trx from "@/components/Innodb_trx";
 import Trxandlocks from "@/components/Trxandlocks";
 import Instanceaccount from "@/components/Instanceaccount";
+import Param_list from "@/components/Param_list";
 
 Vue.use(VueRouter)
 
@@ -146,6 +147,11 @@ const routes = [
                 path: '/instanceaccount',
                 name: '数据库账号管理',
                 component: Instanceaccount
+            },
+            {
+                path: '/param_list',
+                name: '参数配置',
+                component: Param_list
             },
         ]
     }
