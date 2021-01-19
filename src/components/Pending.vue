@@ -357,8 +357,20 @@ export default {
     async exec_all_sql(row) {
       for (const i in row) {
         // console.log(row[i])
-        await this.commitOrder(row[i])
+        // await this.commitOrder(row[i])
+        const {data: res} = await this.$ajax
+            .post(`/execsql/${row[i].id}/`)
+            .catch(() => {
+              return this.$notify.error({
+                title: "错误",
+                message: "发起SQL执行操作失败"
+              });
+            });
+        if (res.msg !== "success" || !res.msg) return this.$message.error(res.msg);
+        this.$message.success("SQL已放后台执行中，请稍后刷新页面查看是否执行完成！");
       }
+      await this.get_workorder();
+
     },
     rejectOrder_all(row) {
       this.$prompt("请输入驳回理由", "提示", {
