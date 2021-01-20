@@ -92,7 +92,7 @@
         <el-row :gutter="60">
           <el-col :span="12" style="margin-left: 50px">
             <el-button @click="sqlFormat" type="danger">格式化sql</el-button>
-<!--            <el-button @click="outerVisible = true" type="info">sql记事本</el-button>-->
+            <!--            <el-button @click="outerVisible = true" type="info">sql记事本</el-button>-->
           </el-col>
           <el-col :span="6">
             <el-button type="info" @click="resetForm('queryRef')">重置</el-button>
@@ -316,6 +316,15 @@ export default {
       if (res.msg !== "success") {
         this.isRet = false;
         return this.$message.error(res.msg);
+      }
+      for (const i in res.data) {
+        for (const j in res.data[i]) {
+          if (j.indexOf(".") !== -1) {
+            let jj = j.replace(".", " ")
+            res.data[i][jj] = res.data[i][j]
+          }
+
+        }
       }
       this.tableData = res.data;
       this.total = res.total;
