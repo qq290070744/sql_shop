@@ -24,6 +24,7 @@ import Innodb_trx from "@/components/Innodb_trx";
 import Trxandlocks from "@/components/Trxandlocks";
 import Instanceaccount from "@/components/Instanceaccount";
 import Param_list from "@/components/Param_list";
+import Instance_monitor from "@/components/Instance_monitor";
 
 Vue.use(VueRouter)
 
@@ -152,6 +153,11 @@ const routes = [
                 path: '/param_list',
                 name: '参数配置',
                 component: Param_list
+            },
+            {
+                path: '/instance_monitor',
+                name: '实例监控',
+                component: Instance_monitor
             },
         ]
     }
