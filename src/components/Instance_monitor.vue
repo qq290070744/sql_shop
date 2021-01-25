@@ -3,7 +3,7 @@
     <el-breadcrumb separator-class="el-icon-arrow-right">
       <el-breadcrumb-item :to="{ path: '/dashboard' }">首页</el-breadcrumb-item>
       <el-breadcrumb-item>实例管理</el-breadcrumb-item>
-      <el-breadcrumb-item>实例监控</el-breadcrumb-item>
+      <el-breadcrumb-item>实时监控</el-breadcrumb-item>
     </el-breadcrumb>
     <el-card>
       <el-form :inline="true" class="demo-form-inline">

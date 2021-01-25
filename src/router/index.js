@@ -156,7 +156,7 @@ const routes = [
             },
             {
                 path: '/instance_monitor',
-                name: '实例监控',
+                name: '实时监控',
                 component: Instance_monitor
             },
         ]
