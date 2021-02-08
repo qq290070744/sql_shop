@@ -7,8 +7,8 @@
     </el-breadcrumb>
     <el-card>
       <el-form :model="queryInfo" ref="queryRef" :rules="queryRules">
-        <el-row :gutter="0">
-          <el-col :span="7">
+        <el-row :gutter="10">
+          <el-col :xs="6" :sm="6" :md="6" :lg="6" :xl="6" :span="6">
             <el-form-item label="实例名称/地址:" prop="selectHost">
               <el-select
                   v-model="queryInfo.selectHost"
@@ -25,7 +25,7 @@
               </el-select>
             </el-form-item>
           </el-col>
-          <el-col :span="6">
+          <el-col :xs="6" :sm="6" :md="6" :lg="6" :xl="6" :span="6">
             <el-form-item label="数据库:" prop="selectDb">
               <el-select
                   v-model="queryInfo.selectDb"
@@ -38,7 +38,7 @@
               </el-select>
             </el-form-item>
           </el-col>
-          <el-col :span="5">
+          <el-col :xs="6" :sm="6" :md="6" :lg="6" :xl="6" :span="6">
             <el-form-item label="限制条数:" prop="limit2">
               <el-select v-model="queryInfo.limit2" placeholder="请选择限制条数" style="width: 100px;">
                 <el-option
@@ -50,7 +50,7 @@
               </el-select>
             </el-form-item>
           </el-col>
-          <el-col :span="5">
+          <el-col :xs="6" :sm="6" :md="6" :lg="6" :xl="6" :span="6">
             <el-switch
                 v-model="switchValue"
                 active-text="开启sql检查"
@@ -496,5 +496,24 @@ ul {
   overflow-x: hidden;
 }
 
+.el-col {
+  border-radius: 4px;
+}
 
+.bg-purple-dark {
+  background: #99a9bf;
+}
+
+.bg-purple {
+  background: #d3dce6;
+}
+
+.bg-purple-light {
+  background: #e5e9f2;
+}
+
+.grid-content {
+  border-radius: 4px;
+  min-height: 36px;
+}
 </style>
