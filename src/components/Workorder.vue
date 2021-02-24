@@ -15,6 +15,7 @@
                 <template slot-scope="scope">
                   <pre><div v-html="scope.row.sql"></div></pre>
                   <el-button type="primary" @click="alert_sql(scope.row.sql);" size="mini" round>查看全部sql</el-button>
+                  <el-button type="info" @click="get_rollbacksql(scope.row);" size="mini" round>查看回滚语句</el-button>
                 </template>
               </el-table-column>
               <el-table-column
@@ -54,7 +55,7 @@
                   </el-steps>
                 </template>
               </el-table-column>
-              <el-table-column label="备注" >
+              <el-table-column label="备注">
                 <template slot-scope="scope">
                   <pre><div v-html="scope.row.remark.slice(0,100)"></div></pre>
                   <el-button type="primary" @click="alert_remark(scope.row.remark.slice(0,1000));" size="mini" round>查看全部</el-button>
@@ -140,6 +141,18 @@ export default {
       await this.$alert('<pre>' + remark + '</pre>', 'remark', {
         dangerouslyUseHTMLString: true,
       });
+    },
+    async get_rollbacksql(row) {
+      const {data: res} = await this.$ajax
+          .post(`/get_rollbacksql/${row.id}/`)
+          .catch(() => {
+            return this.$notify.error({
+              title: "错误",
+              message: "发起请求失败"
+            });
+          });
+      if (res.msg !== "success") return this.$message.error(res.msg);
+      await this.alert_sql(res.data)
     },
   }
 };
