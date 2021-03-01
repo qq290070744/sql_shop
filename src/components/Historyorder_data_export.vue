@@ -6,6 +6,22 @@
       <el-breadcrumb-item>历史数据导出工单</el-breadcrumb-item>
     </el-breadcrumb>
     <el-card>
+      <el-form :inline="true" class="demo-form-inline">
+        <span class="demonstration"> -   选择日期: </span>
+        <el-date-picker
+            v-model="datetimevalue"
+            type="datetimerange"
+            :picker-options="pickerOptions"
+            range-separator="至"
+            start-placeholder="开始日期"
+            end-placeholder="结束日期"
+            align="right">
+        </el-date-picker>
+        -
+        <el-checkbox v-model="is_check">查看是否检查</el-checkbox>
+        -
+        <el-button type="primary" @click="get_workorder">搜索</el-button>
+      </el-form>
       <el-table :data="tableData" style="width: 100%" border stripe>
         <el-table-column label="#" type="index" align="center" header-align="center"></el-table-column>
         <el-table-column label="发起人" prop="sponsor" align="center" header-align="center"></el-table-column>
@@ -53,6 +69,19 @@
           </template>
         </el-table-column>
         <el-table-column label="工单说明" prop="remark" align="center" header-align="center"></el-table-column>
+        <el-table-column prop="is_check" label="是否检查" align="center" header-align="center">
+          <template slot-scope="scope">
+            <el-tag v-if="scope.row.is_check===1" type="success" class="iconfont icon-zhengchang"></el-tag>
+            <el-tag v-if="scope.row.is_check===0" type="danger" class="iconfont icon-yichang"></el-tag>
+            <el-button
+                type="primary"
+                size="mini"
+                @click="order_mark_check(scope.row.id)"
+            >点击标记检查
+            </el-button>
+          </template>
+
+        </el-table-column>
       </el-table>
       <el-pagination
           @size-change="handleSizeChange"
@@ -77,7 +106,36 @@ export default {
       tableData: [],
       offset: 1,
       limit: 5,
-      total: 0
+      total: 0,
+      pickerOptions: {
+        shortcuts: [{
+          text: '最近一周',
+          onClick(picker) {
+            const end = new Date();
+            const start = new Date();
+            start.setTime(start.getTime() - 3600 * 1000 * 24 * 7);
+            picker.$emit('pick', [start, end]);
+          }
+        }, {
+          text: '最近一个月',
+          onClick(picker) {
+            const end = new Date();
+            const start = new Date();
+            start.setTime(start.getTime() - 3600 * 1000 * 24 * 30);
+            picker.$emit('pick', [start, end]);
+          }
+        }, {
+          text: '最近三个月',
+          onClick(picker) {
+            const end = new Date();
+            const start = new Date();
+            start.setTime(start.getTime() - 3600 * 1000 * 24 * 90);
+            picker.$emit('pick', [start, end]);
+          }
+        }]
+      },
+      datetimevalue: [],
+      is_check: 2,
     };
   },
   mounted() {
@@ -93,15 +151,35 @@ export default {
       this.get_workorder();
     },
     async get_workorder() {
+      let is_check;
+     if (this.is_check === true) {
+        is_check = 1
+      } else if (this.is_check === false) {
+        is_check = 0
+      } else if (this.is_check === 2) {
+        is_check = 2
+      }
+      let start_time = ''
+      let end_time = ''
+      // console.log(this.datetimevalue)
+      if (this.datetimevalue) {
+        if (this.datetimevalue.length > 1) {
+          const date = new Date(this.datetimevalue[0]);
+          const date1 = new Date(this.datetimevalue[1]);
+          start_time = Date.parse(date) / 1000;
+          end_time = Date.parse(date1) / 1000;
+
+        }
+      }
       const {data: res} = await this.$ajax
-          .get(`/historyorder_data_export/?offset=${this.offset}&limit=${this.limit}`)
+          .get(`/historyorder_data_export/?offset=${this.offset}&limit=${this.limit}&is_check=${is_check}&start_time=${start_time}&end_time=${end_time}`)
           .catch(() => {
             return this.$notify.error({
               title: "错误",
               message: "发起请求历史工单失败"
             });
           });
-      if (res.msg != "success") return this.$message.error("获取历史工单失败");
+      if (res.msg !== "success") return this.$message.error("获取历史工单失败");
       this.tableData = res.data;
       this.total = res.total;
       // this.tableData.forEach(item => {
@@ -118,9 +196,21 @@ export default {
       });
     },
     async alert_remark(remark) {
-      this.$alert('<pre>' + remark + '</pre>', 'remark', {
+      await this.$alert('<pre>' + remark + '</pre>', 'remark', {
         dangerouslyUseHTMLString: true,
       });
+    },
+    async order_mark_check(id) {
+      const {data: res} = await this.$ajax
+          .post(`/data_export_order_mark_check/${id}/`)
+          .catch(() => {
+            return this.$notify.error({
+              title: "错误",
+              message: "发起请求失败"
+            });
+          });
+      if (res.msg !== "success") return this.$message.error(res.msg);
+      await this.get_workorder()
     },
   }
 };
