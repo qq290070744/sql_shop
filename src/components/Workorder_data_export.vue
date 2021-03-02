@@ -8,14 +8,14 @@
     <el-card>
       <el-table :data="tableData" style="width: 100%" border stripe>
         <el-table-column label="#" type="index" align="center" header-align="center"></el-table-column>
-        <el-table-column label="审批上级" prop="approver_manager" align="center" header-align="center"></el-table-column>
-        <el-table-column label="审批dba" prop="approver_dba" align="center" header-align="center"></el-table-column>
-        <el-table-column label="实例名称" prop="ins_name" align="center" header-align="center"></el-table-column>
-        <el-table-column label="实例地址" prop="host" align="center" header-align="center"></el-table-column>
+        <el-table-column label="审批上级"   prop="approver_manager" align="center" header-align="center"></el-table-column>
+        <el-table-column label="审批dba"   prop="approver_dba" align="center" header-align="center"></el-table-column>
+        <el-table-column label="实例名称"   prop="ins_name" align="center" header-align="center"></el-table-column>
+        <el-table-column label="实例地址"   prop="host" align="center" header-align="center"></el-table-column>
         <el-table-column label="数据库" prop="dbname" align="center" header-align="center"></el-table-column>
-        <el-table-column label="sql" align="center" header-align="center">
+        <el-table-column label="sql"  align="center" header-align="center">
           <template slot-scope="scope">
-            <pre><div v-html="scope.row.sql.slice(0,100)"></div></pre>
+            <pre><div v-html="scope.row.sql.slice(0,10)"></div></pre>
             <el-button type="primary" @click="alert_sql(scope.row.sql);" size="mini" round>查看全部sql</el-button>
           </template>
         </el-table-column>
@@ -40,18 +40,18 @@
             <el-link type="primary" v-if="scope.row.status===1" v-bind:href="scope.row.path" target="_blank">下载链接</el-link>
           </template>
         </el-table-column>
-        <el-table-column label="发起时间" prop="create_time" align="center" header-align="center"></el-table-column>
-        <el-table-column label="审批时间" align="center" header-align="center">
+        <el-table-column label="发起时间" width="110" prop="create_time" align="center" header-align="center"></el-table-column>
+        <el-table-column label="审批时间" width="110" align="center" header-align="center">
           <template slot-scope="scope">
             <span type="primary" v-if="scope.row.status>=1">{{ scope.row.approve_time }}</span>
           </template>
         </el-table-column>
-        <el-table-column label="下载时间" align="center" header-align="center">
+        <el-table-column label="下载时间" width="110" align="center" header-align="center">
           <template slot-scope="scope">
             <span type="primary" v-if="scope.row.status===3">{{ scope.row.download_time }}</span>
           </template>
         </el-table-column>
-        <el-table-column label="工单说明" prop="remark" align="center" header-align="center"></el-table-column>
+        <el-table-column label="工单说明" prop="remark"   align="center" header-align="center"></el-table-column>
       </el-table>
       <el-pagination
           @size-change="handleSizeChange"

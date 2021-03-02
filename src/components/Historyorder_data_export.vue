@@ -32,7 +32,7 @@
         <el-table-column label="数据库" prop="dbname" align="center" header-align="center"></el-table-column>
         <el-table-column label="sql" align="center" header-align="center">
           <template slot-scope="scope">
-            <pre><div v-html="scope.row.sql.slice(0,100)"></div></pre>
+            <pre><div v-html="scope.row.sql.slice(0,10)"></div></pre>
             <el-button type="primary" @click="alert_sql(scope.row.sql);" size="mini" round>查看全部sql</el-button>
           </template>
         </el-table-column>
@@ -57,13 +57,13 @@
             <el-link type="primary" v-if="scope.row.status==1? true: false" v-bind:href="scope.row.path" target="_blank">下载链接</el-link>
           </template>
         </el-table-column>
-        <el-table-column label="发起时间" prop="create_time" align="center" header-align="center"></el-table-column>
-        <el-table-column label="审批时间" align="center" header-align="center">
+        <el-table-column label="发起时间" width="110" prop="create_time" align="center" header-align="center"></el-table-column>
+        <el-table-column label="审批时间" width="110" align="center" header-align="center">
           <template slot-scope="scope">
             <span type="primary" v-if="scope.row.status>=1">{{ scope.row.approve_time }}</span>
           </template>
         </el-table-column>
-        <el-table-column label="下载时间" align="center" header-align="center">
+        <el-table-column label="下载时间" width="110" align="center" header-align="center">
           <template slot-scope="scope">
             <span type="primary" v-if="scope.row.status===3">{{ scope.row.download_time }}</span>
           </template>
@@ -73,10 +73,10 @@
           <template slot-scope="scope">
             <el-tag v-if="scope.row.is_check===1" type="success" class="iconfont icon-zhengchang"></el-tag>
             <el-tag v-if="scope.row.is_check===0" type="danger" class="iconfont icon-yichang"></el-tag>
-            <el-button
-                type="primary"
-                size="mini"
-                @click="order_mark_check(scope.row.id)"
+            <el-button v-if="scope.row.is_check===0"
+                       type="primary"
+                       size="mini"
+                       @click="order_mark_check(scope.row.id)"
             >点击标记检查
             </el-button>
           </template>
@@ -152,7 +152,7 @@ export default {
     },
     async get_workorder() {
       let is_check;
-     if (this.is_check === true) {
+      if (this.is_check === true) {
         is_check = 1
       } else if (this.is_check === false) {
         is_check = 0

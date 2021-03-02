@@ -99,7 +99,7 @@
           <template slot-scope="scope">
             <el-tag v-if="scope.row.is_check===1" type="success" class="iconfont icon-zhengchang"></el-tag>
             <el-tag v-if="scope.row.is_check===0" type="danger" class="iconfont icon-yichang"></el-tag>
-            <el-button
+            <el-button v-if="scope.row.is_check===0"
                 type="primary"
                 size="mini"
                 @click="order_mark_check(scope.row.id)"
