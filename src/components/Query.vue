@@ -92,11 +92,12 @@
         <el-row :gutter="60">
           <el-col :span="12" style="margin-left: 50px">
             <el-button @click="sqlFormat" type="danger">格式化sql</el-button>
+            <el-button @click="switchValue=true;commitForm('queryRef')" type="primary">获取sql优化建议</el-button>
             <!--            <el-button @click="outerVisible = true" type="info">sql记事本</el-button>-->
           </el-col>
           <el-col :span="6">
             <el-button type="info" @click="resetForm('queryRef')">重置</el-button>
-            <el-button type="primary" @click="commitForm('queryRef')">提交</el-button>
+            <el-button type="primary" @click="switchValue=false;commitForm('queryRef')">提交</el-button>
             <el-button type="primary" @click="dialogFormVisible_data_export = true">查询数据导出</el-button>
           </el-col>
         </el-row>
@@ -236,7 +237,7 @@ export default {
         remark: "",
       },
       activeName: "",
-      switchValue: true,
+      switchValue: false,
       options: [],
       dbs: [],
       queryRules: {
