@@ -25,6 +25,7 @@ import Trxandlocks from "@/components/Trxandlocks";
 import Instanceaccount from "@/components/Instanceaccount";
 import Param_list from "@/components/Param_list";
 import Instance_monitor from "@/components/Instance_monitor";
+import Sales_order from "@/components/Sales_order";
 
 Vue.use(VueRouter)
 
@@ -158,6 +159,11 @@ const routes = [
                 path: '/instance_monitor',
                 name: '实时监控',
                 component: Instance_monitor
+            },
+            {
+                path: '/get_sales_order',
+                name: 'sales_order',
+                component: Sales_order
             },
         ]
     }
