@@ -288,7 +288,7 @@ export default {
   },
   methods: {
     async get_approver() {
-      const {data: res} = await this.$ajax.get("/get_approver/").catch(() => {
+      const {data: res} = await this.$ajax.get("/get_approver_data_export/").catch(() => {
         return this.$notify.error({title: "错误", message: "请求审批人失败"});
       });
       if (res.msg !== "success") return this.$message.error("获取审批人失败");
