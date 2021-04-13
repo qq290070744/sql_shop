@@ -234,6 +234,7 @@ export default {
         await this.$alert('<pre>' + this.desc + '</pre>', this.activeName, {
           dangerouslyUseHTMLString: true,
         });
+        this.activeName = ''
       }
     },
     async getTable() {
