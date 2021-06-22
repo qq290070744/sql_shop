@@ -72,7 +72,7 @@
           @size-change="handleSizeChange"
           @current-change="handleCurrentChange"
           :current-page="queryInfo.page"
-          :page-sizes="[5,10,20,50]"
+          :page-sizes="[10,20,50,100]"
           :page-size="queryInfo.limit"
           layout="total, sizes, prev, pager, next, jumper"
           :total="total"
@@ -520,7 +520,9 @@ export default {
       const {data: tab} = await this.$ajax.get("/instance/", {
         params: this.queryInfo
       });
-      if (tab.msg !== "success") return this.$message.error("实例列表获取失败");
+      if (tab.msg !== "success") {
+        return this.$message.error("实例列表获取失败");
+      }
       for (const item of tab.data) {
         const {data: res} = await this.$ajax.post(
             `/concheck2/?id=${item.id}`

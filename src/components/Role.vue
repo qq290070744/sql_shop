@@ -109,7 +109,7 @@
         @size-change="handlerSizeChange"
         @current-change="handlerCurrentChange"
         :current-page="queryInfo.offset"
-        :page-sizes="[5, 10, 20, 50]"
+        :page-sizes="[ 10, 20, 50,100]"
         :page-size="queryInfo.limit"
         layout="total, sizes, prev, pager, next, jumper"
         :total="total"

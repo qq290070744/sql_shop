@@ -81,6 +81,8 @@
                       @click="rollbackOrder(scope.row)"
                   >回滚
                   </el-button>
+                  <el-button type="info"  @click="get_rollbacksql(scope.row);" size="mini" round>查看回滚语句</el-button>
+
                 </template>
               </el-table-column>
             </el-table>
@@ -100,9 +102,9 @@
             <el-tag v-if="scope.row.is_check===1" type="success" class="iconfont icon-zhengchang"></el-tag>
             <el-tag v-if="scope.row.is_check===0" type="danger" class="iconfont icon-yichang"></el-tag>
             <el-button v-if="scope.row.is_check===0"
-                type="primary"
-                size="mini"
-                @click="order_mark_check(scope.row.id)"
+                       type="primary"
+                       size="mini"
+                       @click="order_mark_check(scope.row.id)"
             >点击标记检查
             </el-button>
           </template>
@@ -113,7 +115,7 @@
           @size-change="handleSizeChange"
           @current-change="handleCurrentChange"
           :current-page="offset"
-          :page-sizes="[5,10,20,50]"
+          :page-sizes="[10,20,50,100]"
           :page-size="limit"
           :hide-on-single-page="true"
           layout="total, sizes, prev, pager, next, jumper"

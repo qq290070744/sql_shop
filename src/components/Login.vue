@@ -54,7 +54,7 @@ import qs from 'qs'
                         if (res.access_token) {
                             window.sessionStorage.setItem('token', res.access_token)
                             window.sessionStorage.setItem('username',this.formData.username)
-                            this.$router.push('/index')
+                            await this.$router.push('/index')
                         } else {
                             this.$message.error('用户名或密码错误')
                         }

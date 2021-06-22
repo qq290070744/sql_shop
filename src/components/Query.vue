@@ -128,7 +128,7 @@
             @size-change="handleSizeChange"
             @current-change="handleCurrentChange"
             :current-page="queryInfo.offset"
-            :page-sizes="[5, 10, 30, 50]"
+            :page-sizes="[ 10, 30, 50,100]"
             :page-size="queryInfo.limit"
             layout="total, sizes, prev, pager, next, jumper"
             :total="total"
