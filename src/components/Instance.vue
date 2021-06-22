@@ -354,7 +354,7 @@ export default {
       queryInfo: {
         ins_name: "",
         page: 1,
-        limit: 5
+        limit: 10
       },
       timer: '',
       rowid: '',

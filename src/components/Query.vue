@@ -230,8 +230,8 @@ export default {
         selectDb: "",
         sql: "",
         offset: 1,
-        limit: 5,
-        limit2: 5,
+        limit: 10,
+        limit2: 10,
         manager: "",
         dba: "",
         remark: "",
@@ -336,7 +336,7 @@ export default {
     },
     async sumit_data_export(form, form1) {
       this.queryInfo.offset = 1;
-      this.queryInfo.limit = 5;
+      this.queryInfo.limit = 10;
       this.tableData = [];
       this.tableLabel = [];
       this.total = 0;
@@ -370,7 +370,7 @@ export default {
     },
     async commitForm(form) {
       this.queryInfo.offset = 1;
-      this.queryInfo.limit = 5;
+      this.queryInfo.limit = 10;
       this.tableData = [];
       this.tableLabel = [];
       this.total = 0;
