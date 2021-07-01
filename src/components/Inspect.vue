@@ -173,7 +173,8 @@ export default {
         sql: {required: true, message: "SQL不可为空", trigger: "blur"},
         manager: {required: true, message: "选择主管", trigger: "blur"},
         dba: {required: true, message: "选择dba", trigger: "blur"},
-        remark: {required: true, message: "工单说明不能为空", trigger: "blur"},
+        remark: [{required: true, message: "必须填写工单说明", trigger: "blur"}
+          , {min: 10, max: 100, message: '长度最少 10 个字符', trigger: 'blur'}]
       },
       tabs: [],
       desc: "",
