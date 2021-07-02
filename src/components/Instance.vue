@@ -524,12 +524,13 @@ export default {
         return this.$message.error("实例列表获取失败");
       }
       for (const item of tab.data) {
-        const {data: res} = await this.$ajax.post(
-            `/concheck2/?id=${item.id}`
-        );
-        res.msg === "success"
-            ? this.$set(item, "status", "1")
-            : this.$set(item, "status", "0");
+        this.$set(item, "status", "1")
+        // const {data: res} = await this.$ajax.post(
+        //     `/concheck2/?id=${item.id}`
+        // );
+        // res.msg === "success"
+        //     ? this.$set(item, "status", "1")
+        //     : this.$set(item, "status", "0");
       }
       this.tableData = tab.data;
       this.total = tab.total;
