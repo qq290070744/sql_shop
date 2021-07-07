@@ -30,7 +30,10 @@
           <el-button type="primary" @click="tail_exec_shell_log(scope.row.log_name);" size="mini" round>查看日志</el-button>
         </template>
       </el-table-column>
-      <el-table-column prop="cmd" label="cmd" sortable align="center" header-align="center"></el-table-column>
+      <el-table-column prop="cmd" label="cmd" sortable align="center" header-align="center">
+        <pre><div v-html="scope.row.cmd.slice(0,10)"></div></pre>
+        <el-button type="primary" @click="alert_remark(scope.row.cmd);" size="mini" round>查看全部命令</el-button>
+      </el-table-column>
     </el-table>
 
   </div>
@@ -132,7 +135,7 @@ export default {
       await this.alert_remark(res.data)
     },
     async alert_remark(remark) {
-      await this.$alert('<pre>' + remark + '</pre>', '日志', {
+      await this.$alert('<pre>' + remark + '</pre>', '详细', {
         dangerouslyUseHTMLString: true,
       });
     },
