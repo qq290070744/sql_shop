@@ -26,6 +26,7 @@ import Instanceaccount from "@/components/Instanceaccount";
 import Param_list from "@/components/Param_list";
 import Instance_monitor from "@/components/Instance_monitor";
 import Sales_order from "@/components/Sales_order";
+import Exec_shell from "@/components/Exec_shell";
 
 Vue.use(VueRouter)
 
@@ -164,6 +165,11 @@ const routes = [
                 path: '/get_sales_order',
                 name: 'sales_order',
                 component: Sales_order
+            },
+            {
+                path: '/exec_shell',
+                name: '执行shell',
+                component: Exec_shell
             },
         ]
     }
