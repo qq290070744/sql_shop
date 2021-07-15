@@ -26,17 +26,32 @@
 
       <el-table
           :data="tbs" style="width: 100%" border stripe>
-        <!--        <el-table-column label="trx_started" prop="trx_started" align="center" header-align="center"></el-table-column>-->
-        <el-table-column
-            align="center"
-            header-align="center"
-            v-for="item in tbs"
-            :key="item"
-            :prop="item"
-            :label="item"
-            show-overflow-tooltip
-        >
-        </el-table-column>
+        <el-table-column label="trx_id"  prop="trx_id" align="center" header-align="center"></el-table-column>
+        <el-table-column label="trx_started" prop="trx_started" align="center" header-align="center"></el-table-column>
+        <el-table-column label="trx_idle_time" prop="trx_idle_time" align="center" header-align="center"></el-table-column>
+        <el-table-column label="trx_state" prop="trx_state" align="center" header-align="center"></el-table-column>
+        <el-table-column label="user" prop="user" align="center" header-align="center"></el-table-column>
+        <el-table-column label="host" prop="host" align="center" header-align="center"></el-table-column>
+        <el-table-column label="db" prop="db" align="center" header-align="center"></el-table-column>
+        <el-table-column label="trx_mysql_thread_id" prop="trx_mysql_thread_id" align="center" header-align="center"></el-table-column>
+        <el-table-column label="trx_operation_state" prop="trx_operation_state" align="center" header-align="center"></el-table-column>
+        <el-table-column label="trx_tables_locked" prop="trx_tables_locked" align="center" header-align="center"></el-table-column>
+        <el-table-column label="trx_rows_locked" prop="trx_rows_locked" align="center" header-align="center"></el-table-column>
+        <el-table-column label="trx_rows_modified" prop="trx_rows_modified" align="center" header-align="center"></el-table-column>
+        <el-table-column label="trx_is_read_only" prop="trx_is_read_only" align="center" header-align="center"></el-table-column>
+        <el-table-column label="trx_isolation_level" prop="trx_isolation_level" align="center" header-align="center"></el-table-column>
+        <el-table-column label="thread_time" prop="thread_time" align="center" header-align="center"></el-table-column>
+        <el-table-column label="info" prop="info" align="center" header-align="center"></el-table-column>
+        <!--        <el-table-column-->
+        <!--            align="center"-->
+        <!--            header-align="center"-->
+        <!--            v-for="item in tbs"-->
+        <!--            :key="item"-->
+        <!--            :prop="item"-->
+        <!--            :label="item"-->
+        <!--            show-overflow-tooltip-->
+        <!--        >-->
+        <!--        </el-table-column>-->
       </el-table>
     </el-card>
   </div>
