@@ -41,7 +41,13 @@
         <el-table-column label="trx_is_read_only" prop="trx_is_read_only" align="center" header-align="center"></el-table-column>
         <el-table-column label="trx_isolation_level" prop="trx_isolation_level" align="center" header-align="center"></el-table-column>
         <el-table-column label="thread_time" prop="thread_time" align="center" header-align="center"></el-table-column>
-        <el-table-column label="info" prop="info" align="center" header-align="center"></el-table-column>
+<!--        <el-table-column label="info" prop="info" align="center" header-align="center"></el-table-column>-->
+        <el-table-column label="INFO" align="center" header-align="center">
+          <template slot-scope="scope">
+            <pre><div v-html="scope.row.info.slice(0,50)"></div></pre>
+            <el-button type="primary" @click="alert_sql(scope.row.info);" size="mini" round>查看全部sql</el-button>
+          </template>
+        </el-table-column>
         <!--        <el-table-column-->
         <!--            align="center"-->
         <!--            header-align="center"-->
@@ -103,6 +109,13 @@ export default {
           });
       if (res.msg !== "success") return this.$message.error(res.msg);
       this.tbs = res.data;
+    },
+async alert_sql(sql) {
+      sql = sqlFormatter.format(sql);
+      sql = hljs.highlight("sql", sql).value;
+      await this.$alert('<pre>' + sql + '</pre>', 'sql', {
+        dangerouslyUseHTMLString: true,
+      });
     },
 
   }
