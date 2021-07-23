@@ -33,12 +33,13 @@
             <el-tag v-else type="info">slave</el-tag>
           </template>
         </el-table-column>
-        <el-table-column prop="status" label="状态" align="center" header-align="center">
-          <template slot-scope="scope">
-            <el-tag v-if="scope.row.status==='1'" type="success" class="iconfont icon-zhengchang"></el-tag>
-            <el-tag v-if="scope.row.status==='0'" type="danger" class="iconfont icon-yichang"></el-tag>
-          </template>
-        </el-table-column>
+        <el-table-column prop="db_type" label="数据库类型" align="center" header-align="center"></el-table-column>
+        <!--        <el-table-column prop="status" label="状态" align="center" header-align="center">-->
+        <!--          <template slot-scope="scope">-->
+        <!--            <el-tag v-if="scope.row.status==='1'" type="success" class="iconfont icon-zhengchang"></el-tag>-->
+        <!--            <el-tag v-if="scope.row.status==='0'" type="danger" class="iconfont icon-yichang"></el-tag>-->
+        <!--          </template>-->
+        <!--        </el-table-column>-->
         <el-table-column label="操作" align="center" header-align="center">
           <template slot-scope="scope">
             <el-button
@@ -143,6 +144,13 @@
         <el-form-item label="主从类型" prop="type">
           <el-radio v-model="formData.type" label="master">master</el-radio>
           <el-radio v-model="formData.type" label="slave">slave</el-radio>
+        </el-form-item>
+        <el-form-item label="数据库类型" prop="db_type">
+          <el-radio v-model="formData.db_type" label="mysql">mysql</el-radio>
+          <el-radio v-model="formData.db_type" label="cassandra">cassandra</el-radio>
+          <el-radio v-model="formData.db_type" label="pgsql">pgsql</el-radio>
+          <el-radio v-model="formData.db_type" label="mongodb">mongodb</el-radio>
+          <el-radio v-model="formData.db_type" label="redis">redis</el-radio>
         </el-form-item>
         <el-form-item>
           <el-row :gutter="15">
@@ -331,6 +339,7 @@ export default {
         user: "",
         password: "",
         type: "master",
+        db_type: "mysql",
         status: "1",
         binlog_list: [],
         binlog: ""
@@ -349,7 +358,8 @@ export default {
         ],
         user: [{required: true, message: "请输入账号", trigger: "blur"}],
         password: [{required: true, message: "请输入密码", trigger: "blur"}],
-        type: [{required: true, message: "请选择主从类型", trigger: "change"}]
+        type: [{required: true, message: "请选择主从类型", trigger: "change"}],
+        db_type: [{required: true, message: "请选择数据库类型", trigger: "change"}],
       },
       queryInfo: {
         ins_name: "",
