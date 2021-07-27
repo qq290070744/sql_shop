@@ -3,7 +3,7 @@
     <el-header>
       <div>
         <img src="../assets/timg.jpg"/>
-        <span>MySQL运维管理平台</span>
+        <span>数据库运维管理平台</span>
       </div>
       <div>
         <el-menu
