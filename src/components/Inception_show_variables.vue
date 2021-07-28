@@ -5,7 +5,7 @@
       <el-breadcrumb-item>goInception配置管理</el-breadcrumb-item>
       <el-breadcrumb-item>审核规则</el-breadcrumb-item>
     </el-breadcrumb>
-    <a href="https://hanchuanchuan.github.io/goInception/options.html#%E6%94%AF%E6%8C%81%E5%8F%82%E6%95%B0" target="_blank"><h1>查看参数的解释</h1></a>
+    <a href="https://hanchuanchuan.github.io/goInception/zh/options.html" target="_blank"><h1>查看参数的解释</h1></a>
     <el-card>
       <el-table :data="tableData" style="width: 100%" border stripe>
         <el-table-column label="#" type="index" align="center" header-align="center"></el-table-column>
