@@ -124,16 +124,16 @@
               min-width="200px"
           ></el-table-column>
         </el-table>
-        <el-pagination
-            @size-change="handleSizeChange"
-            @current-change="handleCurrentChange"
-            :current-page="queryInfo.offset"
-            :page-sizes="[ 10, 30, 50,100]"
-            :page-size="queryInfo.limit"
-            layout="total, sizes, prev, pager, next, jumper"
-            :total="total"
-            style="margin-top: 20px"
-        ></el-pagination>
+<!--        <el-pagination-->
+<!--            @size-change="handleSizeChange"-->
+<!--            @current-change="handleCurrentChange"-->
+<!--            :current-page="queryInfo.offset"-->
+<!--            :page-sizes="[ 10, 30, 50,100]"-->
+<!--            :page-size="queryInfo.limit"-->
+<!--            layout="total, sizes, prev, pager, next, jumper"-->
+<!--            :total="total"-->
+<!--            style="margin-top: 20px"-->
+<!--        ></el-pagination>-->
       </div>
     </el-card>
 
