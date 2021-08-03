@@ -18,6 +18,17 @@
             align="right">
         </el-date-picker>
         -
+        <el-form-item label="用户名">
+          <el-input v-model="sponsor" placeholder="user"></el-input>
+        </el-form-item>
+        -
+        <el-form-item label="host">
+          <el-input v-model="host" placeholder="host"></el-input>
+        </el-form-item>
+        -
+        <el-form-item label="数据库名">
+          <el-input v-model="dbname" placeholder="dbname"></el-input>
+        </el-form-item>
         <el-checkbox v-model="is_check">查看是否检查</el-checkbox>
         -
         <el-button type="primary" @click="get_workorder">搜索</el-button>
@@ -81,7 +92,7 @@
                       @click="rollbackOrder(scope.row)"
                   >回滚
                   </el-button>
-                  <el-button type="info"  @click="get_rollbacksql(scope.row);" size="mini" round>查看回滚语句</el-button>
+                  <el-button type="info" @click="get_rollbacksql(scope.row);" size="mini" round>查看回滚语句</el-button>
 
                 </template>
               </el-table-column>
@@ -164,6 +175,9 @@ export default {
       },
       datetimevalue: [],
       is_check: 2,
+      sponsor: '',
+      host: '',
+      dbname: '',
     };
   },
   mounted() {
@@ -200,7 +214,7 @@ export default {
         }
       }
       const {data: res} = await this.$ajax
-          .get(`/historyorder/?offset=${this.offset}&limit=${this.limit}&is_check=${is_check}&start_time=${start_time}&end_time=${end_time}`)
+          .get(`/historyorder/?offset=${this.offset}&limit=${this.limit}&is_check=${is_check}&start_time=${start_time}&end_time=${end_time}&sponsor=${this.sponsor}&host=${this.host}&dbname=${this.dbname}`)
           .catch(() => {
             return this.$notify.error({
               title: "错误",

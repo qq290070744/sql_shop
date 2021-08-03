@@ -8,6 +8,18 @@
     <el-card>
       <el-row :gutter="10">
         <el-col :span="8">
+          <el-date-picker
+            v-model="datetimevalue"
+            type="datetimerange"
+            :picker-options="pickerOptions"
+            range-separator="至"
+            start-placeholder="开始日期"
+            end-placeholder="结束日期"
+            align="right">
+        </el-date-picker>
+        </el-col>
+
+        <el-col :span="4">
           <el-input
               v-model="sponsor"
               clearable
@@ -15,6 +27,16 @@
               placeholder="输入用户名"
           ></el-input>
         </el-col>
+
+        <el-col :span="4">
+          <el-input
+              v-model="dbname"
+              clearable
+              prefix-icon="el-icon-search"
+              placeholder="输入数据库名"
+          ></el-input>
+        </el-col>
+
         <el-col :span="4">
           <el-button type="primary" @click="searchdbid">搜索</el-button>
         </el-col>
@@ -57,6 +79,35 @@ export default {
       limit: 10,
       total: 0,
       sponsor: '',
+      dbname: '',
+      pickerOptions: {
+        shortcuts: [{
+          text: '最近一周',
+          onClick(picker) {
+            const end = new Date();
+            const start = new Date();
+            start.setTime(start.getTime() - 3600 * 1000 * 24 * 7);
+            picker.$emit('pick', [start, end]);
+          }
+        }, {
+          text: '最近一个月',
+          onClick(picker) {
+            const end = new Date();
+            const start = new Date();
+            start.setTime(start.getTime() - 3600 * 1000 * 24 * 30);
+            picker.$emit('pick', [start, end]);
+          }
+        }, {
+          text: '最近三个月',
+          onClick(picker) {
+            const end = new Date();
+            const start = new Date();
+            start.setTime(start.getTime() - 3600 * 1000 * 24 * 90);
+            picker.$emit('pick', [start, end]);
+          }
+        }]
+      },
+      datetimevalue: [],
     };
   },
   mounted() {
@@ -93,8 +144,20 @@ export default {
       });
     },
     async searchdbid() {
+       let start_time = ''
+      let end_time = ''
+      // console.log(this.datetimevalue)
+      if (this.datetimevalue) {
+        if (this.datetimevalue.length > 1) {
+          const date = new Date(this.datetimevalue[0]);
+          const date1 = new Date(this.datetimevalue[1]);
+          start_time = Date.parse(date) / 1000;
+          end_time = Date.parse(date1) / 1000;
+
+        }
+      }
       const {data: res} = await this.$ajax
-          .get(`/get_query_log?offset=${this.offset}&limit=${this.limit}&sponsor=${this.sponsor}`)
+          .get(`/get_query_log?offset=${this.offset}&limit=${this.limit}&sponsor=${this.sponsor}&dbname=${this.dbname}&start_time=${start_time}&end_time=${end_time}`)
           .catch(() => {
             return this.$notify.error({
               title: "错误",
