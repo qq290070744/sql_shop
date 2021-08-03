@@ -9,14 +9,14 @@
       <el-row :gutter="10">
         <el-col :span="8">
           <el-date-picker
-            v-model="datetimevalue"
-            type="datetimerange"
-            :picker-options="pickerOptions"
-            range-separator="至"
-            start-placeholder="开始日期"
-            end-placeholder="结束日期"
-            align="right">
-        </el-date-picker>
+              v-model="datetimevalue"
+              type="datetimerange"
+              :picker-options="pickerOptions"
+              range-separator="至"
+              start-placeholder="开始日期"
+              end-placeholder="结束日期"
+              align="right">
+          </el-date-picker>
         </el-col>
 
         <el-col :span="4">
@@ -38,7 +38,7 @@
         </el-col>
 
         <el-col :span="4">
-          <el-button type="primary" @click="searchdbid">搜索</el-button>
+          <el-button type="primary" @click="get_query_log">搜索</el-button>
         </el-col>
       </el-row>
       <el-table :data="tableData" style="width: 100%" border stripe>
@@ -123,19 +123,19 @@ export default {
       this.offset = val;
       this.get_query_log();
     },
-    async get_query_log() {
-      const {data: res} = await this.$ajax
-          .get(`/get_query_log?offset=${this.offset}&limit=${this.limit}`)
-          .catch(() => {
-            return this.$notify.error({
-              title: "错误",
-              message: "发起请求失败"
-            });
-          });
-      if (res.msg !== "success") return this.$message.error("获取失败");
-      this.tableData = res.data;
-      this.total = res.total;
-    },
+    // async get_query_log() {
+    //   const {data: res} = await this.$ajax
+    //       .get(`/get_query_log?offset=${this.offset}&limit=${this.limit}`)
+    //       .catch(() => {
+    //         return this.$notify.error({
+    //           title: "错误",
+    //           message: "发起请求失败"
+    //         });
+    //       });
+    //   if (res.msg !== "success") return this.$message.error("获取失败");
+    //   this.tableData = res.data;
+    //   this.total = res.total;
+    // },
     async alert_sql(sql) {
       sql = sqlFormatter.format(sql);
       sql = hljs.highlight("sql", sql).value;
@@ -143,8 +143,8 @@ export default {
         dangerouslyUseHTMLString: true,
       });
     },
-    async searchdbid() {
-       let start_time = ''
+    async get_query_log() {
+      let start_time = ''
       let end_time = ''
       // console.log(this.datetimevalue)
       if (this.datetimevalue) {
