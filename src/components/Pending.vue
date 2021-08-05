@@ -14,7 +14,7 @@
                 type="success"
                 icon="iconfont icon-zhihang"
                 size="medium"
-                @click="exec_all_sql(props.row.sql)"
+                @click="exec_all_sql(props.row.id)"
             >全部执行
             </el-button>
             <el-button
@@ -354,7 +354,7 @@ export default {
       this.$message.success("成功");
       await this.get_workorder_data_export();
     },
-    async exec_all_sql(row) {
+    async exec_all_sql1(row) {
       for (const i in row) {
         // console.log(row[i])
         // await this.commitOrder(row[i])
@@ -369,6 +369,24 @@ export default {
         if (res.msg !== "success" || !res.msg) return this.$message.error(res.msg);
         this.$message.success("SQL已放后台执行中，请稍后刷新页面查看是否执行完成！");
       }
+      await this.get_workorder();
+
+    },
+    async exec_all_sql(id) {
+
+        // console.log(row[i])
+        // await this.commitOrder(row[i])
+        const {data: res} = await this.$ajax
+            .post(`/execsql_all/${id}/`)
+            .catch(() => {
+              return this.$notify.error({
+                title: "错误",
+                message: "发起SQL执行操作失败"
+              });
+            });
+        if (res.msg !== "success" || !res.msg) return this.$message.error(res.msg);
+        this.$message.success("SQL已放后台执行中，请稍后刷新页面查看是否执行完成！");
+
       await this.get_workorder();
 
     },
