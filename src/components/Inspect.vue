@@ -206,6 +206,7 @@ export default {
       this.queryInfo.sql = this.editor.getValue()
       this.$refs[form].validate(async valid => {
         if (!valid) return this.$message.error("请选择/填写必要项");
+        this.sqlFormat();
         this.queryInfo.sql = this.editor.getValue();
         const {data: res} = await this.$ajax
             .post("/inspect/", this.queryInfo)
