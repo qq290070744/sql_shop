@@ -121,13 +121,15 @@ export default {
         password: '',
         oldpassword: ''
       },
-      formLabelWidth: '120px'
+      formLabelWidth: '120px',
+      timer_pendingOrder: '',
     };
   },
   created() {
     this.get_menu();
     this.username = window.sessionStorage.getItem("username");
     this.get_pendingOrder();
+    this.timer_pendingOrder = setInterval(this.get_pendingOrder, 10000);
   },
   methods: {
     toPending() {
