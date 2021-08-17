@@ -62,6 +62,16 @@
                 </template>
               </el-table-column>
             </el-table>
+<!--            <el-pagination-->
+<!--                @size-change="handleSizeChange_sqllist"-->
+<!--                @current-change="handleCurrentChange_sqllist"-->
+<!--                :current-page="offset_sqllist"-->
+<!--                :page-sizes="[10,20,50,100]"-->
+<!--                :page-size="limit_sqllist"-->
+<!--                :hide-on-single-page="true"-->
+<!--                layout="total, sizes, prev, pager, next, jumper"-->
+<!--                :total="total_sqllist"-->
+<!--            ></el-pagination>-->
           </template>
         </el-table-column>
         <el-table-column label="#" type="index" align="center" header-align="center"></el-table-column>
@@ -94,9 +104,14 @@ export default {
   data() {
     return {
       tableData: [],
+      tableData_sqllist: [],
       offset: 1,
+      offset_sqllist: 1,
       limit: 10,
-      total: 0
+      limit_sqllist: 10,
+      total: 0,
+      total_sqllist: 0,
+      sql_id: 0,
     };
   },
   mounted() {
@@ -129,6 +144,28 @@ export default {
       //     i.sql = hljs.highlight("sql", i.sql).value;
       //   });
       // });
+    },
+    handleSizeChange_sqllist(val) {
+      this.offset_sqllist = 1;
+      this.limit_sqllist = val;
+      this.sql_list();
+    },
+    handleCurrentChange_sqllist(val) {
+      this.offset_sqllist = val;
+      this.sql_list();
+    },
+    async sql_list(sql_id) {
+      const {data: res} = await this.$ajax
+          .get(`/sql_list/${sql_id}/?offset=${this.offset_sqllist}&limit=${this.limit_sqllist}`)
+          .catch(() => {
+            return this.$notify.error({
+              title: "错误",
+              message: "发起请求失败"
+            });
+          });
+      if (res.msg !== "success") return this.$message.error("获取失败");
+      this.tableData_sqllist = res.data;
+      this.total_sqllist = res.total;
     },
     async alert_sql(sql) {
       sql = sqlFormatter.format(sql);

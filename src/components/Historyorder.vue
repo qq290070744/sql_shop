@@ -37,6 +37,7 @@
       <el-table :data="tableData" style="width: 100%" border stripe>
         <el-table-column type="expand">
           <template slot-scope="props">
+            <el-link type="primary" v-bind:href="'/api/v1/download_rollbacksql/'+props.row.id+'/'" target="_blank">下载回滚sql语句</el-link>
             <el-table :data="props.row.sql" size="mini" border stripe>
               <el-table-column label="#" type="index" align="center" header-align="center"></el-table-column>
               <el-table-column label="SQL" header-align="center">
